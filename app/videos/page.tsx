@@ -6,7 +6,30 @@ const prisma = new PrismaClient()
 export const dynamic = 'force-dynamic';
 
 export default async function VideosPage() {
-    const videos = await prisma.video.findMany()
+    let videos = []
+    try {
+        videos = await prisma.video.findMany()
+    } catch (error) {
+        console.error("Failed to fetch videos:", error)
+        // Mock data fallback to prevent crash
+        videos = [
+            {
+                id: 1,
+                title: "Mock Video 1: System Maintenance",
+                bvid: "BV1xx411c7mD", // Example BVID
+                type: "long",
+                coverImage: "https://i0.hdslb.com/bfs/archive/3f70e6e663045435646565656565656565656565.jpg", // Placeholder
+            },
+            {
+                id: 2,
+                title: "Mock Video 2: Content Unavailable",
+                bvid: "BV1xx411c7mD",
+                type: "short",
+                coverImage: null,
+            }
+        ] as any[] // Type assertion to bypass strict Prisma type matching for mock data
+    }
+
     const longVideos = videos.filter(v => v.type === 'long')
     const shortVideos = videos.filter(v => v.type === 'short')
 

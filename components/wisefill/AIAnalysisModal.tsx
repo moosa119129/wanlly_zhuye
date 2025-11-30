@@ -31,48 +31,34 @@ export function AIAnalysisModal({ isOpen, onClose, userProfile, score, volunteer
     }, [isOpen])
 
     const generateAnalysis = async () => {
-        // Mock AI Analysis Logic
         const filledSlots = volunteers.filter(v => v !== null) as School[]
-        let text = `考生 ${userProfile.name} (分数: ${score}) 的志愿分析报告：\n\n`
 
-        if (filledSlots.length === 0) {
-            text += "⚠️ 您尚未填报任何志愿，建议根据分数选择合适的学校。\n"
-        } else {
-            text += `✅ 已填报 ${filledSlots.length} 个志愿。\n`
+        // Construct the prompt
+        let prompt = `考生 ${userProfile.name} (分数: ${score}) 的志愿分析请求。\n`
+        prompt += `已填报 ${filledSlots.length} 个志愿：\n`
+        filledSlots.forEach(s => {
+            prompt += `- ${s.name} (${s.score}分, ${s.provincialKey ? '省重点' : '普通'})\n`
+        })
+        prompt += `\n请给出详细的志愿结构分析和建议。`
 
-            const rushCount = filledSlots.filter(s => s.score > score).length
-            const stableCount = filledSlots.filter(s => s.score <= score && s.score >= score - 10).length
-            const protectCount = filledSlots.filter(s => s.score < score - 10).length
-            const provincialCount = filledSlots.filter(s => s.provincialKey).length
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
+            })
 
-            text += `\n📊 结构分析：\n- 冲刺型: ${rushCount}所\n- 稳妥型: ${stableCount}所\n- 保底型: ${protectCount}所\n`
-            text += `- 省重点: ${provincialCount}所\n\n`
+            const data = await response.json()
+            setAnalysisText(data.result || "无法获取分析结果。")
 
-            text += "💡 详细点评：\n"
-            if (rushCount > 3) text += "⚠️ 冲刺学校过多，风险较大，建议增加稳妥型学校。\n"
-            if (protectCount === 0) text += "⚠️ 缺乏保底学校，存在滑档风险！请务必选择至少一所分数线低于您成绩10分以上的学校。\n"
-            if (stableCount >= 3 && protectCount >= 2) text += "🌟 志愿结构合理，梯度分明，录取概率较高。\n"
-
-            if (provincialCount > 0) {
-                text += `🌟 您选择了 ${provincialCount} 所省重点中学，展现了较高的目标追求。\n`
-            }
-
-            // Specific school comments
-            const riskySchool = filledSlots.find(s => s.score > score + 5)
-            if (riskySchool) {
-                text += `⚠️ 注意：${riskySchool.name} 分数线较高（${riskySchool.score}），录取难度大，建议作为第一志愿冲刺。\n`
-            }
-
-            const safeSchool = filledSlots.find(s => s.score < score - 15)
-            if (safeSchool) {
-                text += `✅ ${safeSchool.name} 作为保底志愿非常稳妥（${safeSchool.score}），可确保录取。\n`
-            }
+        } catch (error) {
+            console.error("Frontend Analysis Error:", error)
+            setAnalysisText("网络请求失败，请检查网络连接。")
         }
 
-        setAnalysisText(text)
         setStatus('saving')
 
-        // Save to backend
+        // Save to backend (keep existing logic)
         const result = await saveWiseFillRecord({
             name: userProfile.name,
             phone: userProfile.phone,
