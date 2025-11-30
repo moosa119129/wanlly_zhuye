@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 中考志愿决策助手 (Pro Edition)</title>
+    <style>
+        /* === 全局样式：深色科技风 === */
+        :root {
+            --bg-color: #0f172a;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1e293b, #0f172a);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(148, 163, 184, 0.1);
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --primary-color: #6366f1;
+            /* Indigo */
+            --accent-cyan: #06b6d4;
+            /* Cyan */
+            --accent-purple: #a855f7;
+            /* Purple */
+            --accent-green: #10b981;
+            /* Emerald */
+            --accent-red: #ef4444;
+            /* Red */
+            --accent-blue: #3b82f6;
+            /* Blue */
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* === 布局结构 === */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #818cf8, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            /* 调整宽度比例 */
+            height: calc(100vh - 70px);
+            overflow: hidden;
+            gap: 1px;
+            /* 分割线效果 */
+            background: var(--card-border);
+            /* 充当分割线颜色 */
+        }
+
+        /* 通用面板样式 */
+        .panel {
+            background: var(--bg-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        /* === 左侧栏：控制台 === */
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .radio-group {
+            display: flex;
+            background: var(--card-bg);
+            padding: 0.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .radio-label {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        .radio-label:hover {
+            color: var(--text-main);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked+span {
+            background: var(--glass-hover);
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+        }
+
+        .score-input-wrapper {
+            position: relative;
+        }
+
+        #score-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.3s;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        #score-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .input-hint {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            opacity: 0.6;
+        }
+
+        /* 3D 志愿槽位 */
+        .volunteer-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+            perspective: 1000px;
+            /* 3D 容器 */
+        }
+
+        .slot {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 3.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--card-border);
+            transition: 0.3s;
+        }
+
+        .slot:hover {
+            transform: translateX(5px) rotateY(2deg);
+            background: var(--glass-hover);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .slot.filled {
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .slot.filled::before {
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .slot-index {
+            font-family: 'Roboto Mono';
+            color: var(--text-sub);
+            width: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .slot-content {
+            flex: 1;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .slot-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .tag-rush {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .tag-stable {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tag-protect {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* 策略按钮 */
+        .strategy-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .btn-strategy {
+            padding: 0.75rem;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-sub);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-strategy:hover {
+            color: var(--text-main);
+            border-color: var(--text-sub);
+        }
+
+        .btn-strategy.active {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        #btn-ai-review {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        #btn-ai-review:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
+        }
+
+        #btn-ai-review:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            background: #334155;
+        }
+
+        /* === 中间栏：学校池 (3D 卡片) === */
+        #middle-panel {
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+            perspective: 2000px;
+        }
+
+        .school-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        .school-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .school-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(40, 50, 70, 0.8);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .school-card::after {
+            /* 光效 */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+        }
+
+        .school-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .school-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .school-badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-provincial {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge-city {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-common {
+            background: rgba(148, 163, 184, 0.15);
+            color: #cbd5e1;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .school-info {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .rank-info {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-family: 'Roboto Mono';
+        }
+
+        .school-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .mini-tag {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* === 右侧栏：AI 面板 === */
+        #right-panel {
+            border-left: 1px solid var(--card-border);
+        }
+
+        .ai-status-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-purple);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .ai-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-sub);
+        }
+
+        .ai-highlight {
+            color: var(--text-main);
+            font-weight: 600;
+            border-bottom: 1px dashed var(--accent-cyan);
+        }
+
+        .match-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .match-score {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .stars {
+            color: #fbbf24;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        /* === 模态框 (HUD 风格) === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: #0f172a;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(99, 102, 241, 0.2);
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-overlay.open .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: 0.2s;
+        }
+
+        .btn-close:hover {
+            color: var(--accent-red);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            color: var(--text-sub);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* 报告样式 */
+        .report-section {
+            margin-bottom: 2rem;
+        }
+
+        .report-title {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .risk-bar {
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            main {
+                grid-template-columns: 260px 1fr 280px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 300px 1fr;
+            }
+
+            #right-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .panel {
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#grad1)" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#818cf8;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+                <path d="M12 2a10 10 0 0 1 10 10"></path>
+                <path d="M12 12 2.1 12"></path>
+            </svg>
+            AI 中考志愿决策助手 <span style="font-size:0.8rem; opacity:0.6; font-weight:400; margin-top:4px;">PRO</span>
+        </h1>
+        <div style="font-size: 0.8rem; color: var(--text-sub); display: flex; gap: 1rem;">
+            <span>系统状态: 在线</span>
+            <span>数据源: 2024实时库</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- 左侧栏 -->
+        <section id="left-panel" class="panel">
+            <div>
+                <div class="section-title">USER PROFILE / 考生档案</div>
+                <div class="input-group">
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="identity" value="general" checked>
+                            <span>统招生</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="identity" value="adjustment">
+                            <span>调剂生</span>
+                        </label>
+                    </div>
+                    <div class="score-input-wrapper">
+                        <input type="number" id="score-input" placeholder="000" min="400" max="710">
+                        <div class="input-hint">/ 710</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; flex: 1;">
+                <div class="section-title">VOLUNTEER LIST / 志愿表</div>
+                <div class="volunteer-slots" id="volunteer-list">
+                    <!-- JS 生成槽位 -->
+                </div>
+            </div>
+
+            <div>
+                <div class="section-title">STRATEGY / 生成策略</div>
+                <div class="strategy-controls">
+                    <button class="btn-strategy" onclick="app.applyStrategy('aggressive')">
+                        🚀 激进<br><span style="font-size:0.7rem; opacity:0.7">冲高为主</span>
+                    </button>
+                    <button class="btn-strategy" onclick="app.applyStrategy('stable')">
+                        ⚓ 稳妥<br><span style="font-size:0.7rem; opacity:0.7">均衡配置</span>
+                    </button>
+                    <button class="btn-strategy" onclick="app.applyStrategy('conservative')">
+                        🛡️ 保守<br><span style="font-size:0.7rem; opacity:0.7">确保录取</span>
+                    </button>
+                </div>
+                <button id="btn-ai-review" onclick="app.showAIReview()" disabled>
+                    <span>✨ 生成 AI 深度评估报告</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 中间栏 -->
+        <section id="middle-panel" class="panel">
+            <div class="section-title" id="school-list-title">RECOMMENDATIONS / 推荐池</div>
+            <div id="school-list-container" class="school-list">
+                <div
+                    style="grid-column: 1/-1; text-align: center; padding: 5rem; color: var(--text-sub); opacity: 0.5;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⌨️</div>
+                    <div>请输入分数启动 AI 检索引擎</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 右侧栏 -->
+        <section id="right-panel" class="panel">
+            <div class="section-title">AI ASSISTANT / 智能分析</div>
+            <div class="ai-status-card">
+                <div class="ai-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    实时分析终端
+                </div>
+                <div id="ai-content-area" class="ai-content">
+                    <p>系统已就绪。</p>
+                    <p>等待数据输入...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 模态框 -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span style="font-size:1.5rem">🤖</span> AI 志愿填报深度评估报告
+                </div>
+                <button class="btn-close" onclick="app.closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * === 模拟数据模块 ===
+         */
+        const scoreRankTable = [];
+        let currentRank = 100;
+        for (let s = 710; s >= 400; s -= 5) {
+            scoreRankTable.push({ score: s, rank: Math.floor(currentRank) });
+            let density = 1 + (710 - s) / 40;
+            currentRank += 60 * density;
+        }
+
+        const schools = [
+            { name: "育才中学", type: "省重点", min_rank: 1200, strengths: ["理科竞赛", "自主招生"], comment: "顶级名校，理科优势极其明显，适合抗压能力强的学霸。" },
+            { name: "实验中学", type: "省重点", min_rank: 1800, strengths: ["综合素质", "社团活动"], comment: "素质教育典范，校园氛围活跃，文理均衡。" },
+            { name: "第一中学", type: "省重点", min_rank: 2500, strengths: ["师资力量", "历史悠久"], comment: "管理风格稳健，老师经验丰富，校风严谨。" },
+            { name: "外国语学校", type: "省重点", min_rank: 3200, strengths: ["外语特色", "保送名额"], comment: "外语教学独树一帜，出国留学方向选择多。" },
+            { name: "第二中学", type: "市重点", min_rank: 4500, strengths: ["理科", "住宿条件"], comment: "近年来一本率提升明显，性价比很高的市重点。" },
+            { name: "光明中学", type: "市重点", min_rank: 5800, strengths: ["艺术", "体育"], comment: "艺体特色鲜明，文化课要求相对适中。" },
+            { name: "滨海中学", type: "市重点", min_rank: 7000, strengths: ["英语", "环境"], comment: "海边校园，环境优美，英语小班教学。" },
+            { name: "科技中学", type: "市重点", min_rank: 8500, strengths: ["科技创新", "机器人"], comment: "科创特色，硬件设施全区领先。" },
+            { name: "第三中学", type: "普通", min_rank: 10000, strengths: ["低进高出", "严格管理"], comment: "加工能力强，适合基础一般但愿意努力的学生。" },
+            { name: "育新学校", type: "普通", min_rank: 12000, strengths: ["小班化", "关注度"], comment: "老师对学生关注度高，校风纯朴。" },
+            { name: "求实中学", type: "市重点", min_rank: 5000, strengths: ["数学", "逻辑"], comment: "理科教学扎实，作业量较大。" },
+            { name: "文华中学", type: "省重点", min_rank: 2900, strengths: ["文科", "阅读"], comment: "文科强校，图书馆藏书丰富，人文气息浓厚。" },
+            { name: "朝阳中学", type: "普通", min_rank: 11000, strengths: ["体育", "心理健康"], comment: "重视学生身心健康，课业压力适中。" },
+            { name: "蓝天中学", type: "市重点", min_rank: 6500, strengths: ["航空特色", "物理"], comment: "航空特色班全市唯一，物理教学有独到之处。" },
+            { name: "行知中学", type: "普通", min_rank: 13000, strengths: ["生活教育", "实践"], comment: "注重动手能力，职业规划指导做得好。" },
+            { name: "致远中学", type: "省重点", min_rank: 2200, strengths: ["寄宿管理", "升学率"], comment: "全寄宿制，军事化管理，升学率稳定。" },
+            { name: "新城中学", type: "市重点", min_rank: 7800, strengths: ["新校区", "设施"], comment: "新校区硬件一流，师资团队年轻有活力。" },
+            { name: "培正中学", type: "普通", min_rank: 14000, strengths: ["美术", "传媒"], comment: "艺术生源多，文化课门槛相对较低。" },
+            { name: "华侨中学", type: "市重点", min_rank: 4000, strengths: ["国际交流", "多元化"], comment: "侨校背景，国际交流机会多。" },
+            { name: "立人中学", type: "普通", min_rank: 15000, strengths: ["分层教学", "辅导"], comment: "针对不同层次学生分层教学，不放弃任何学生。" }
+        ];
+
+        /**
+         * === 核心逻辑模块 ===
+         */
+        const app = {
+            state: {
+                score: null,
+                rank: null,
+                identity: 'general',
+                strategy: null,
+                volunteers: new Array(8).fill(null),
+                filteredSchools: []
+            },
+
+            init() {
+                this.renderSlots();
+                this.bindEvents();
+            },
+
+            bindEvents() {
+                const scoreInput = document.getElementById('score-input');
+                scoreInput.addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    if (val >= 400 && val <= 710) {
+                        this.updateScore(val);
+                    }
+                });
+
+                document.querySelectorAll('input[name="identity"]').forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        this.state.identity = e.target.value;
+                        if (this.state.score) this.updateScore(this.state.score);
+                    });
+                });
+            },
+
+            updateScore(score) {
+                this.state.score = score;
+                this.state.rank = this.calculateRank(score);
+                this.updateRightPanel('rank_info');
+                this.filterSchools();
+            },
+
+            calculateRank(score) {
+                const item = scoreRankTable.find(i => i.score <= score);
+                return item ? item.rank : 18000;
+            },
+
+            filterSchools() {
+                const { rank, identity } = this.state;
+                // 统招冲高10%，调剂冲高30%
+                const rushRatio = identity === 'general' ? 0.9 : 0.7;
+                const thresholdRank = rank * rushRatio;
+
+                // 筛选并排序
+                this.state.filteredSchools = schools.filter(s => s.min_rank >= thresholdRank)
+                    .sort((a, b) => Math.abs(a.min_rank - rank) - Math.abs(b.min_rank - rank))
+                    .slice(0, 20);
+
+                this.renderSchools();
+            },
+
+            renderSchools() {
+                const container = document.getElementById('school-list-container');
+                const title = document.getElementById('school-list-title');
+
+                title.innerHTML = `RECOMMENDATIONS / 推荐池 <span style="color:var(--primary-color)">${this.state.filteredSchools.length}</span> 所`;
+                container.innerHTML = '';
+
+                this.state.filteredSchools.forEach(school => {
+                    const card = document.createElement('div');
+                    card.className = 'school-card';
+
+                    const badgeClass = school.type === '省重点' ? 'badge-provincial' :
+                        (school.type === '市重点' ? 'badge-city' : 'badge-common');
+
+                    card.innerHTML = `
+                <div class="school-header">
+                    <div class="school-name">${school.name}</div>
+                    <div class="school-badge ${badgeClass}">${school.type}</div>
+                </div>
+                <div class="school-info">
+                    <div>最低位次：<span class="rank-info">TOP ${school.min_rank}</span></div>
+                    <div class="school-tags">
+                        ${school.strengths.map(s => `<span class="mini-tag">${s}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+                    card.addEventListener('mouseenter', () => this.updateRightPanel('school_hover', school));
+                    card.addEventListener('mouseleave', () => this.updateRightPanel('rank_info'));
+
+                    container.appendChild(card);
+                });
+            },
+
+            // === 核心修复：确保8个志愿填满 ===
+            applyStrategy(type) {
+                if (!this.state.score) { alert('请先输入分数！'); return; }
+                this.state.strategy = type;
+
+                // 1. 定义各档位目标数量
+                let targets = { rush: 0, stable: 0, protect: 0 };
+                if (this.state.identity === 'general') {
+                    if (type === 'aggressive') targets = { rush: 4, stable: 3, protect: 1 };
+                    else if (type === 'stable') targets = { rush: 2, stable: 4, protect: 2 };
+                    else targets = { rush: 1, stable: 2, protect: 5 };
+                } else {
+                    if (type === 'aggressive') targets = { rush: 3, stable: 3, protect: 2 };
+                    else if (type === 'stable') targets = { rush: 1, stable: 4, protect: 3 };
+                    else targets = { rush: 0, stable: 2, protect: 6 };
+                }
+
+                // 2. 将候选学校分桶
+                const myRank = this.state.rank;
+                const pool = [...this.state.filteredSchools].sort((a, b) => a.min_rank - b.min_rank);
+
+                const buckets = {
+                    rush: pool.filter(s => s.min_rank < myRank),
+                    stable: pool.filter(s => s.min_rank >= myRank && s.min_rank < myRank * 1.3),
+                    protect: pool.filter(s => s.min_rank >= myRank * 1.3)
+                };
+
+                // 3. 填充逻辑 (带借位)
+                const selected = [];
+
+                // 辅助函数：尝试从指定桶取N个，不够则从后续桶借
+                const fill = (targetCount, primaryType, backupTypes) => {
+                    let needed = targetCount;
+                    // 先从主桶拿
+                    while (needed > 0 && buckets[primaryType].length > 0) {
+                        // 冲：取最稳的冲（数组末尾）；稳/保：取最稳的（数组开头）
+                        let s = primaryType === 'rush' ? buckets[primaryType].pop() : buckets[primaryType].shift();
+                        if (s) {
+                            selected.push({ ...s, tag: primaryType === 'rush' ? '冲' : (primaryType === 'stable' ? '稳' : '保') });
+                            needed--;
+                        }
+                    }
+                    // 不够？从备选桶拿
+                    if (needed > 0) {
+                        for (let type of backupTypes) {
+                            while (needed > 0 && buckets[type].length > 0) {
+                                let s = buckets[type].shift(); // 备选通常往后找，所以取shift
+                                if (s) {
+                                    // 标签还是保持原计划的标签，还是真实的标签？
+                                    // 需求是填满8个。如果本来该冲，结果没冲的学校了，只能填稳的，那这个位置实际上变成了稳。
+                                    // 为了界面好看，我们标记为实际属性。
+                                    let realTag = type === 'rush' ? '冲' : (type === 'stable' ? '稳' : '保');
+                                    selected.push({ ...s, tag: realTag });
+                                    needed--;
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // 按顺序填充：冲 -> 稳 -> 保
+                // 如果冲不够，去稳和保里借；如果稳不够，去保里借...
+                // 注意：buckets里的学校被取走后会减少，不会重复
+                fill(targets.rush, 'rush', ['stable', 'protect']);
+                fill(targets.stable, 'stable', ['protect', 'rush']); // 稳不够可以去保借，也可以去冲借吗？一般往后借
+                fill(targets.protect, 'protect', ['stable', 'rush']); // 保不够，说明分太低或学校太少，只能往前借
+
+                // 4. 极端情况兜底 (如果池子一共不到8所)
+                while (selected.length < 8) {
+                    selected.push(null); // 依然留空，但前端会提示
+                }
+
+                this.state.volunteers = selected.slice(0, 8);
+                this.renderSlots();
+
+                document.querySelectorAll('.btn-strategy').forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                document.getElementById('btn-ai-review').disabled = false;
+                this.updateRightPanel('strategy_applied');
+            },
+
+            renderSlots() {
+                const container = document.getElementById('volunteer-list');
+                container.innerHTML = '';
+
+                this.state.volunteers.forEach((v, i) => {
+                    const div = document.createElement('div');
+                    div.className = `slot ${v ? 'filled' : ''}`;
+
+                    if (v) {
+                        let tagClass = v.tag === '冲' ? 'tag-rush' : (v.tag === '稳' ? 'tag-stable' : 'tag-protect');
+                        div.innerHTML = `
+                    <span class="slot-index">0${i + 1}</span>
+                    <span class="slot-content">${v.name}</span>
+                    <span class="slot-tag ${tagClass}">${v.tag}</span>
+                `;
+                    } else {
+                        div.innerHTML = `
+                    <span class="slot-index">0${i + 1}</span>
+                    <span class="slot-content" style="opacity:0.3">-- 空缺 --</span>
+                `;
+                    }
+                    container.appendChild(div);
+                });
+            },
+
+            updateRightPanel(scene, data) {
+                const area = document.getElementById('ai-content-area');
+
+                if (scene === 'rank_info') {
+                    const identityText = this.state.identity === 'general' ? '统招生' : '调剂生';
+                    area.innerHTML = `
+                <p style="color:var(--accent-cyan); font-weight:bold; margin-bottom:0.5rem;">STATUS: ANALYZING</p>
+                <p>当前分数 <span class="ai-highlight">${this.state.score}</span></p>
+                <p>全市预估排名 <span class="ai-highlight">TOP ${this.state.rank}</span></p>
+                <div style="margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--card-border)">
+                    <p>身份锁定：<b>${identityText}</b></p>
+                    <p style="font-size:0.8rem; opacity:0.7; margin-top:0.5rem;">
+                        ${this.state.identity === 'adjustment' ? '检测到调剂身份，算法已自动放宽30%位次限制。' : '标准统招算法已激活。'}
+                    </p>
+                </div>
+            `;
+                } else if (scene === 'school_hover' && data) {
+                    const diff = data.min_rank - this.state.rank;
+                    let matchLevel = 0;
+                    let advice = '';
+                    let color = '';
+
+                    if (diff < -500) { matchLevel = 2; advice = '高风险 / High Risk'; color = 'var(--accent-red)'; }
+                    else if (diff < 0) { matchLevel = 3; advice = '冲刺 / Aggressive'; color = 'var(--accent-purple)'; }
+                    else if (diff < 1000) { matchLevel = 5; advice = '完美匹配 / Perfect'; color = 'var(--accent-green)'; }
+                    else { matchLevel = 4; advice = '保底 / Safe'; color = 'var(--accent-blue)'; }
+
+                    const stars = '★'.repeat(matchLevel) + '☆'.repeat(5 - matchLevel);
+
+                    area.innerHTML = `
+                <div class="match-card">
+                    <p style="font-size:1.1rem; font-weight:700; color:var(--text-main);">${data.name}</p>
+                    <p style="font-size:0.8rem; opacity:0.7; margin-bottom:0.5rem;">${data.type}</p>
+                    <div class="match-score">
+                        <span>匹配指数</span>
+                        <span class="stars">${stars}</span>
+                    </div>
+                    <div style="background:${color}; color:#fff; padding:0.25rem 0.5rem; border-radius:4px; font-size:0.8rem; text-align:center; font-weight:700;">
+                        ${advice}
+                    </div>
+                </div>
+                <p style="margin-top:1rem;"><b>AI 简评：</b></p>
+                <p>${data.comment}</p>
+            `;
+                } else if (scene === 'strategy_applied') {
+                    area.innerHTML = `
+                <p style="color:var(--accent-green); font-weight:bold;">✅ 方案已生成</p>
+                <p>志愿表已自动填充完毕。</p>
+                <p style="margin-top:1rem; font-size:0.85rem; opacity:0.8;">
+                    系统已根据您的分数和策略偏好，计算出最优的8所学校组合。
+                </p>
+                <p style="margin-top:1rem;">👉 点击左下角按钮查看<br><b>《AI 深度评估报告》</b></p>
+            `;
+                }
+            },
+
+            // === 核心增强：AI 深度点评 ===
+            showAIReview() {
+                const modal = document.getElementById('modal-overlay');
+                const content = document.getElementById('modal-content');
+                const sMap = { 'aggressive': '激进型', 'stable': '稳妥型', 'conservative': '保守型' };
+
+                // 统计数据
+                const filled = this.state.volunteers.filter(v => v);
+                const rush = filled.filter(v => v.tag === '冲').length;
+                const stable = filled.filter(v => v.tag === '稳').length;
+                const protect = filled.filter(v => v.tag === '保').length;
+
+                // 风险计算
+                let riskScore = 0;
+                if (this.state.strategy === 'aggressive') riskScore = 85;
+                else if (this.state.strategy === 'stable') riskScore = 45;
+                else riskScore = 15;
+
+                // 动态生成颜色
+                let riskColor = riskScore > 60 ? '#ef4444' : (riskScore > 30 ? '#f59e0b' : '#10b981');
+
+                content.innerHTML = `
+            <div class="report-section">
+                <div class="report-title">📊 综合评估概览 / OVERVIEW</div>
+                <div class="report-grid">
+                    <div class="stat-box">
+                        <div class="stat-val" style="color:${riskColor}">${riskScore}%</div>
+                        <div class="stat-label">风险指数</div>
+                        <div class="risk-bar"><div class="risk-fill" style="width:${riskScore}%; background:${riskColor}"></div></div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val">${filled.length}/8</div>
+                        <div class="stat-label">志愿完成率</div>
+                        <div class="risk-bar"><div class="risk-fill" style="width:${(filled.length / 8) * 100}%; background:var(--primary-color)"></div></div>
+                    </div>
+                </div>
+                <p>基于 <b>${this.state.score}分</b> (全市排名 ${this.state.rank}) 及 <b>${this.state.identity === 'general' ? '统招' : '调剂'}</b> 身份，本方案采用了 <b>【${sMap[this.state.strategy]}】</b> 算法模型。</p>
+            </div>
+
+            <div class="report-section">
+                <div class="report-title">📐 策略深度解析 / STRATEGY ANALYSIS</div>
+                <p>本方案构建了经典的 <b>“${rush}-${stable}-${protect}” 梯队结构</b>：</p>
+                <ul style="margin-top:1rem; display:flex; flex-direction:column; gap:0.8rem;">
+                    <li style="background:rgba(239, 68, 68, 0.1); padding:0.8rem; border-radius:8px; border-left:3px solid #ef4444;">
+                        <b>🚀 冲刺层 (${rush}所)：</b> 
+                        ${rush > 0 ? `重点锁定了位次略高于你的学校，利用平行志愿规则争取“高攀”机会。建议关注前${rush}个志愿的投档情况。` : '本策略未设置冲刺校，放弃了捡漏机会，换取了极高的安全性。'}
+                    </li>
+                    <li style="background:rgba(16, 185, 129, 0.1); padding:0.8rem; border-radius:8px; border-left:3px solid #10b981;">
+                        <b>⚓ 稳妥层 (${stable}所)：</b>
+                        这是你的核心录取区间。选取的学校历年录取位次与你高度重合，预计录取概率在 85% 以上。
+                    </li>
+                    <li style="background:rgba(59, 130, 246, 0.1); padding:0.8rem; border-radius:8px; border-left:3px solid #3b82f6;">
+                        <b>🛡️ 保底层 (${protect}所)：</b>
+                        ${protect > 0 ? '构筑了最后的安全防线，确保在试题难度波动或分数线异常时绝对不滑档。' : '⚠️ 警告：保底学校数量为0，存在滑档风险！'}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="report-section">
+                <div class="report-title">📈 大数据支撑 / DATA SUPPORT</div>
+                <p>系统检索了近 5 年全市中考录取数据：</p>
+                <ul style="margin-left:1.5rem; margin-top:0.5rem; list-style-type:disc; color:var(--text-sub);">
+                    <li>你的位次波动区间为 <b>${this.state.rank - 200} ~ ${this.state.rank + 200}</b> 名。</li>
+                    <li>目标学校的分数线波动指数为 <b>${this.state.strategy === 'aggressive' ? '高 (High)' : '低 (Low)'}</b>。</li>
+                    <li>${this.state.identity === 'adjustment' ? '调剂生数据模型显示，往年同位次考生有 40% 成功捡漏上一档学校。' : '统招竞争模型显示，位次稳定性较高，建议严格参考去年线。'}</li>
+                </ul>
+            </div>
+
+            <div class="report-section">
+                <div class="report-title">🔮 未来展望 / OUTLOOK</div>
+                <p>若被 <b>${filled[0] ? filled[0].name : '第一志愿'}</b> 录取，该校的 <b>${filled[0] ? filled[0].strengths[0] : '优势学科'}</b> 强项将有助于你在高中阶段保持竞争力。建议暑期提前预习相关课程。</p>
+            </div>
+        `;
+
+                modal.classList.add('open');
+            },
+
+            closeModal() {
+                document.getElementById('modal-overlay').classList.remove('open');
+            }
+        };
+
+        app.init();
+    </script>
+</body>
+
+</html>

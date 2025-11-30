@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  coverImage  String?
+  publishedAt DateTime @default(now())
+}
+
+model Video {
+  id          Int     @id @default(autoincrement())
+  title       String
+  bvid        String  @unique
+  type        String  @default("long")
+  coverImage  String?
+}
+
+model AppDemo {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  status      String
+  linkUrl     String
+  coverImage  String?
+}
+
+model Article {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  excerpt     String?
+  content     String
+  coverImage  String?
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WiseFillRecord {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String
+  score       Int
+  volunteers  String   // JSON string of the volunteer list
+  createdAt   DateTime @default(now())
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  coverImage  String
+  price       String
+  features    String
+  linkUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

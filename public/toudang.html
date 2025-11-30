@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中考投档模拟演练</title>
+    <style>
+        :root {
+            --primary-bg-start: #0f172a;
+            /* slate-900 */
+            --primary-bg-end: #1e293b;
+            /* slate-800 */
+            --card-bg-start: rgba(30, 41, 59, 0.95);
+            /* slate-800 */
+            --card-bg-end: rgba(15, 23, 42, 0.9);
+            /* slate-900 */
+            --card-header-bg: rgba(51, 65, 85, 0.85);
+            /* slate-700 */
+            --text-color: #e2e8f0;
+            /* slate-200 */
+            --text-light: #f8fafc;
+            /* slate-50 */
+            --highlight-strong: #eab308;
+            /* yellow-500 */
+            --highlight-medium: #1d4ed8;
+            /* blue-700 */
+            --highlight-processed: #334155;
+            /* slate-700 */
+            --slot-empty-bg: #334155;
+            /* slate-700 */
+            --slot-filled-tongzhao-bg: #0ea5e9;
+            /* sky-500 */
+            --slot-filled-tiaoji-bg: #22c55e;
+            /* green-500 */
+            --border-radius: 12px;
+            --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            --box-shadow-light: 0 3px 6px rgba(0, 0, 0, 0.3);
+            --font-size-base: 15px;
+            /* 增大基础字体 */
+            --font-size-large: 17.5px;
+            /* 相应调整 */
+            --font-size-small: 13.5px;
+        }
+
+        body {
+            font-family: 'Roboto', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-bg-start), var(--primary-bg-end));
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header h1 {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+
+        /* Layout Grid Update */
+        main {
+            display: grid;
+            gap: 12px;
+            grid-template-areas:
+                "stats stats"
+                "schools schools"
+                "students info"
+                "controls controls";
+            grid-template-columns: 3.5fr 1fr;
+            /* Student list much wider */
+            grid-template-rows: auto auto 1fr auto;
+            /* Student/Info row takes remaining space */
+            flex-grow: 1;
+            overflow: hidden;
+            /* Prevent main scroll */
+            padding-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+                height: auto;
+                display: block;
+            }
+
+            main {
+                grid-template-areas:
+                    "stats"
+                    "schools"
+                    "students"
+                    "info"
+                    "controls";
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                overflow: visible;
+            }
+        }
+
+        .panel {
+            background: linear-gradient(145deg, var(--card-bg-start), var(--card-bg-end));
+            padding: 12px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel>h2,
+        .panel>h3 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #60a5fa;
+            font-weight: 500;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.3em;
+            flex-shrink: 0;
+        }
+
+        /* Stats Bar Redesign */
+        #stats-bar {
+            grid-area: stats;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 0;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow-light);
+            text-align: center;
+            font-size: 1em;
+            transition: transform 0.2s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96, 165, 250, 0.5);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .stat-card span {
+            font-weight: bold;
+            font-size: 1.4em;
+            color: #60a5fa;
+            margin-top: 2px;
+        }
+
+        #school-plan {
+            grid-area: schools;
+        }
+
+        #student-list-area {
+            grid-area: students;
+            overflow: hidden;
+        }
+
+        #schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 12px;
+        }
+
+        .school-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: var(--box-shadow-light);
+            font-size: 0.9em;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .school-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-1px);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        .school-card h4 {
+            margin: 0 0 7px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #93c5fd;
+            text-align: center;
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+
+        .quota-type {
+            font-weight: 500;
+            font-size: 0.9em;
+            margin-top: 7px;
+            margin-bottom: 3px;
+            color: #94a3b8;
+        }
+
+        .slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 5px;
+        }
+
+        .slot {
+            height: 27px;
+            background-color: var(--slot-empty-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            color: #cbd5e1;
+        }
+
+        .slot.filled {
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .slot.filled.tongzhao {
+            background-color: var(--slot-filled-tongzhao-bg);
+            border-color: #0284c7;
+        }
+
+        .slot.filled.tiaoji {
+            background-color: var(--slot-filled-tiaoji-bg);
+            border-color: #16a34a;
+        }
+
+        .score-lines {
+            margin-top: auto;
+            font-size: 0.8em;
+            color: #94a3b8;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 3px;
+            min-height: 2.6em;
+            line-height: 1.3;
+        }
+
+        .score-lines p {
+            margin: 1px 0;
+        }
+
+        @keyframes slot-reject-animation {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-2px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(2px);
+            }
+        }
+
+        .slot.slot-rejection {
+            animation: slot-reject-animation 0.4s ease-in-out;
+            box-shadow: 0 0 0 1.5px #ef4444 inset !important;
+        }
+
+        /* Compact Student Table */
+        #student-table-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.05em;
+            /* Larger font */
+        }
+
+        th,
+        td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 6px;
+            /* Increased padding */
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: var(--card-header-bg);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-weight: 600;
+            color: #e2e8f0;
+            padding: 10px 6px;
+        }
+
+        .student-row.processing {
+            background-color: #1d4ed8 !important;
+            font-weight: bold;
+            box-shadow: 0 0 8px var(--highlight-medium);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            color: white !important;
+        }
+
+        .student-row.processed {
+            background-color: var(--highlight-processed);
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .choice-cell.checking {
+            background-color: var(--highlight-strong) !important;
+            color: #000 !important;
+            outline: 2.5px solid #facc15;
+            transform: scale(1.08);
+            box-shadow: 0 0 10px var(--highlight-strong);
+            border-radius: 6px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s, box-shadow 0.2s, outline 0.2s;
+        }
+
+        #bottom-panels {
+            grid-area: info;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #log-panel {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #log-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            font-size: 1em;
+            /* Larger font */
+            border-radius: 6px;
+            color: #cbd5e1;
+        }
+
+        #log-content p {
+            margin: 0 0 6px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 4px;
+        }
+
+        #log-content p.core-scene-log {
+            font-weight: bold;
+            color: #fcd34d;
+            background-color: rgba(251, 191, 36, 0.1);
+            padding: 4px 6px;
+            border-left: 3px solid var(--highlight-strong);
+            border-radius: 3px;
+            margin-left: -6px;
+            margin-right: -6px;
+        }
+
+        #controls {
+            grid-area: controls;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        #controls button {
+            padding: 10px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: var(--border-radius);
+            background-image: linear-gradient(to right, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            background-size: 200% auto;
+            color: white;
+            cursor: pointer;
+            transition: background-position 0.4s ease-in-out, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #controls button:hover:not(:disabled) {
+            background-position: right center;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        #controls button:active:not(:disabled) {
+            transform: translateY(0px);
+        }
+
+        #controls button:disabled {
+            background-image: none;
+            background-color: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #94a3b8;
+        }
+
+        .flying-name {
+            position: fixed;
+            background: linear-gradient(45deg, var(--highlight-strong), #f59e0b);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 500;
+            z-index: 10000;
+            transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-out, left 0.3s ease-out, top 0.3s ease-out;
+            pointer-events: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9990;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #60a5fa;
+            font-size: 1.4em;
+        }
+
+        .modal-content p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .modal-content button {
+            padding: 9px 18px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 8px;
+            background-color: #3b82f6;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .modal-content button:hover {
+            background-color: #2563eb;
+        }
+
+        #corner-logo {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            width: 65px;
+            height: auto;
+            z-index: 10001;
+            opacity: 0.7;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .student-row.processing {
+            background-color: #1d4ed8 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>中考投档模拟演练</h1>
+    </header>
+    <main>
+        <section id="stats-bar">
+            <div class="stat-card">考生总数<span id="total-students">0</span></div>
+            <div class="stat-card">学校总数<span id="total-schools">10</span></div>
+            <div class="stat-card">已录取<span id="admitted-count">0</span></div>
+            <div class="stat-card">滑档人数<span id="failed-admission-count">0</span></div>
+        </section>
+        <section id="school-plan" class="panel">
+            <h2>学校招生计划</h2>
+            <div id="schools-grid"></div>
+        </section>
+        <section id="student-list-area" class="panel">
+            <h2>考生志愿清单</h2>
+            <div id="student-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>位次</th>
+                            <th>姓名</th>
+                            <th>分数</th>
+                            <th>身份</th>
+                            <th>志愿A</th>
+                            <th>志愿B</th>
+                            <th>志愿C</th>
+                            <th>志愿D</th>
+                            <th>志愿E</th>
+                            <th>志愿F</th>
+                            <th>志愿G</th>
+                            <th>志愿H</th>
+                            <th>录取结果</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+        <section id="bottom-panels">
+            <div id="log-panel" class="panel">
+                <h3>详细投档日志</h3>
+                <div id="log-content"></div>
+            </div>
+        </section>
+        <section id="controls">
+            <button id="next-step-btn">下一步 (Space/PgDn)</button>
+            <button id="fast-forward-btn" disabled>快速投档 (15人)</button>
+            <button id="reset-btn">重置模拟</button>
+        </section>
+    </main>
+    <div id="info-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title">重要场景提示</h3>
+            <p id="modal-message"></p>
+            <button id="modal-close-btn">明白了 (Space/PgDn)</button>
+        </div>
+    </div>
+    <img src="mm_dad_logo.jpg" alt="角标" id="corner-logo">
+
+    <script>
+        // --- JavaScript code from the previous fully working version ---
+        // This includes all fixes and features discussed.
+        // (The JS code block that was previously confirmed to work well before this font/spacing request)
+        // --- START OF COPIED JS ----
+        const SCHOOL_NAMES = ["七中林荫", "九中宁夏", "石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中", "十二中学", "石室成飞"];
+        let statsUI, schoolsGrid, studentTableBody, logContent, modalOverlay, modalTitle, modalMessage, modalCloseBtn, nextStepBtn, fastForwardBtn, resetBtn;
+
+        function initializeDOMReferences() {
+            statsUI = { totalStudents: document.getElementById('total-students'), totalSchools: document.getElementById('total-schools'), admittedCount: document.getElementById('admitted-count'), failedAdmissionCount: document.getElementById('failed-admission-count'), };
+            schoolsGrid = document.getElementById('schools-grid'); studentTableBody = document.getElementById('student-table-body'); logContent = document.getElementById('log-content');
+            modalOverlay = document.getElementById('info-modal-overlay'); modalTitle = document.getElementById('modal-title'); modalMessage = document.getElementById('modal-message'); modalCloseBtn = document.getElementById('modal-close-btn');
+            nextStepBtn = document.getElementById('next-step-btn'); fastForwardBtn = document.getElementById('fast-forward-btn'); resetBtn = document.getElementById('reset-btn');
+        }
+
+        let isModalOpen = false; let afterModalAction = null; let coreSceneMessageQueue = [];
+
+        function showModal(title, message) {
+            return new Promise((resolve) => {
+                if (currentMode === 'fast-forward') {
+                    if (afterModalAction) { const tempAction = afterModalAction; afterModalAction = null; tempAction(); } resolve(); return;
+                }
+                if (!modalOverlay) { console.error("Modal overlay not found!"); resolve(); return; }
+                modalTitle.textContent = title; modalMessage.textContent = message; modalOverlay.classList.add('visible'); isModalOpen = true;
+                if (nextStepBtn) nextStepBtn.disabled = true; if (fastForwardBtn) fastForwardBtn.disabled = true;
+                afterModalAction = () => { resolve(); };
+            });
+        }
+
+        async function addLog(message, isCoreScene = false) {
+            if (!logContent) { return; }
+            const p = document.createElement('p'); p.textContent = `[${logStep++}] ${message}`;
+            if (isCoreScene) { p.classList.add('core-scene-log'); }
+            logContent.appendChild(p); logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        function generateStudentData() {
+            const surnames = ["王", "李", "张", "刘", "陈", "杨", "黄", "赵", "吴", "周", "徐", "孙", "马", "朱", "胡", "郭", "何", "高", "林", "罗", "郑", "梁", "谢", "宋", "唐", "许", "韩", "冯", "邓", "曹", "彭", "曾", "萧", "田", "董", "潘", "袁", "蔡"];
+            const namesuffix = ["第一", "第二", "第三", "第四", "第五", "第六", "第七", "第八", "第九", "第十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "二十一", "二十二", "二十三", "二十四", "二十五", "二十六", "二十七", "二十八", "二十九", "三十", "三十一", "三十二", "三十三", "三十四", "三十五", "三十六", "三十七", "三十八"];
+            let students = []; let currentScore = 666;
+            const predefinedData = [
+                { namePrefix: "王", score: 666, status: '统招', choices: ["七中林荫", "九中宁夏", "石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中"] },
+                { namePrefix: "李", score: 665, status: '统招', choices: ["九中宁夏", "石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中", "十二中学"] },
+                { namePrefix: "张", score: 664, status: '调剂', choices: ["石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中", "十二中学", "石室成飞"] },
+                { namePrefix: "刘", score: 663, status: '调剂', choices: ["石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中", "十二中学", "石室成飞"] },
+                { namePrefix: "陈", score: 662, status: '统招', choices: ["七中林荫", "九中宁夏", "石室文庙", "七中高新", "九中光华", "石室北湖", "树德外语", "教科附中"] },
+            ];
+            for (let i = 0; i < 38; i++) {
+                let studentBase;
+                const rank = i + 1;
+                let name;
+
+                if (i < predefinedData.length) {
+                    studentBase = { ...predefinedData[i] };
+                    name = studentBase.namePrefix + namesuffix[i];
+                    currentScore = studentBase.score;
+                } else {
+                    name = surnames[i % surnames.length] + namesuffix[i];
+                    if (rank % 5 === 0) currentScore -= 2; else currentScore -= 1;
+                    if (currentScore < 600) currentScore = 600;
+                    const status = Math.random() < 0.75 ? '统招' : '调剂';
+                    let currentChoices = []; let availableSchools = [...SCHOOL_NAMES];
+                    for (let j = 0; j < 8; j++) { if (availableSchools.length === 0) break; const choiceIndex = Math.floor(Math.random() * availableSchools.length); currentChoices.push(availableSchools[choiceIndex]); availableSchools.splice(choiceIndex, 1); }
+                    studentBase = { score: currentScore, status: status, choices: currentChoices };
+                }
+                students.push({ rank: rank, name: name, ...studentBase, admissionResult: null, admissionRemark: null, admissionSchoolName: null, admissionType: null, processed: false });
+            } return students;
+        }
+
+        let schoolsData = {}; let studentsData = [];
+        function initializeSchools() { schoolsData = {}; SCHOOL_NAMES.forEach(n => { schoolsData[n] = { name: n, quotas: { tongzhao: { total: 3, filled: 0, students: [], slots: [] }, tiaoji: { total: 1, filled: 0, students: [], slots: [] } }, tongzhaoScoreLine: null, tiaojiScoreLine: null } }); }
+        function renderSchools() {
+            if (!schoolsGrid) { return; }
+            schoolsGrid.innerHTML = '';
+            SCHOOL_NAMES.forEach(name => {
+                const school = schoolsData[name];
+                if (!school || !school.quotas || !school.quotas.tongzhao || !school.quotas.tiaoji) { return; }
+                const card = document.createElement('div'); card.className = 'school-card'; card.id = `school-${name}`;
+                let tSHTML = ''; for (let i = 0; i < school.quotas.tongzhao.total; i++) tSHTML += `<div class="slot" id="slot-${name}-tongzhao-${i}"></div>`;
+                let tiSHTML = ''; for (let i = 0; i < school.quotas.tiaoji.total; i++) tiSHTML += `<div class="slot" id="slot-${name}-tiaoji-${i}"></div>`;
+                card.innerHTML = `<h4>${name}</h4>
+                                  <div class="quota-type">统招 (<span id="filled-${name}-tongzhao">0</span>/${school.quotas.tongzhao.total}):</div><div class="slots tongzhao-slots">${tSHTML}</div>
+                                  <div class="quota-type">调剂 (<span id="filled-${name}-tiaoji">0</span>/${school.quotas.tiaoji.total}):</div><div class="slots tiaoji-slots">${tiSHTML}</div>
+                                  <div class="score-lines" id="score-lines-${name}"></div>`;
+                schoolsGrid.appendChild(card);
+                school.quotas.tongzhao.slots = []; school.quotas.tiaoji.slots = [];
+                for (let i = 0; i < school.quotas.tongzhao.total; i++) { const el = document.getElementById(`slot-${name}-tongzhao-${i}`); if (el) school.quotas.tongzhao.slots.push(el); }
+                for (let i = 0; i < school.quotas.tiaoji.total; i++) { const el = document.getElementById(`slot-${name}-tiaoji-${i}`); if (el) school.quotas.tiaoji.slots.push(el); }
+            });
+        }
+        function renderStudents() {
+            if (!studentTableBody) { return; }
+            studentTableBody.innerHTML = '';
+            studentsData.forEach(s => {
+                if (!s) { return; }
+                const r = studentTableBody.insertRow(); r.id = `student-row-${s.rank}`; r.className = 'student-row';
+                const cs = (s.choices || []).map((c, ix) => `<td class="choice-cell" data-rank="${s.rank}" data-choice-index="${ix}">${c || '-'}</td>`).join('');
+                r.innerHTML = `<td>${s.rank}</td><td>${s.name}</td><td>${s.score}</td><td>${s.status}</td>${cs}<td class="admission-result">-</td><td class="admission-remark">-</td>`;
+            });
+        }
+        function updateStatsUI() { if (!statsUI || !statsUI.totalStudents) { return; } statsUI.totalStudents.textContent = studentsData.length; statsUI.admittedCount.textContent = currentAdmittedCount; statsUI.failedAdmissionCount.textContent = currentFailedAdmissionCount; }
+
+        async function animateFlyIn(studentName, startElement, targetSlotElement) {
+            if (!targetSlotElement) { return; }
+            if (!startElement) startElement = { getBoundingClientRect: () => ({ left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 }) };
+            if (currentMode === 'fast-forward' && !isAnimatingFastForward) { targetSlotElement.textContent = studentName.substring(0, 3); return; }
+            const flyingName = document.createElement('div'); flyingName.className = 'flying-name'; flyingName.textContent = studentName; document.body.appendChild(flyingName);
+            const startRect = startElement.getBoundingClientRect(); const targetRect = targetSlotElement.getBoundingClientRect();
+            flyingName.style.left = `${startRect.left + window.scrollX + startRect.width / 4}px`; flyingName.style.top = `${startRect.top + window.scrollY + startRect.height / 4}px`;
+            flyingName.style.transform = 'scale(0.5)'; flyingName.style.opacity = '0';
+            await new Promise(resolve => requestAnimationFrame(() => { flyingName.style.transition = 'transform 0.3s cubic-bezier(0.25,0.1,0.25,1), opacity 0.3s ease-out, left 0.3s ease-out, top 0.3s ease-out'; flyingName.style.left = `${startRect.left + window.scrollX}px`; flyingName.style.top = `${startRect.top + window.scrollY}px`; flyingName.style.transform = 'scale(1)'; flyingName.style.opacity = '1'; resolve(); }));
+            await new Promise(resolve => setTimeout(resolve, 300));
+            flyingName.style.transition = 'transform 0.5s cubic-bezier(0.42,0,0.58,1), opacity 0.5s ease-in, left 0.5s cubic-bezier(0.42,0,0.58,1), top 0.5s cubic-bezier(0.42,0,0.58,1)';
+            flyingName.style.left = `${targetRect.left + window.scrollX}px`; flyingName.style.top = `${targetRect.top + window.scrollY}px`; flyingName.style.transform = 'scale(0.9)'; flyingName.style.opacity = '0.8';
+            const flyDuration = (currentMode === 'fast-forward' && isAnimatingFastForward) ? 80 : 500;
+            await new Promise(resolve => setTimeout(resolve, flyDuration));
+            targetSlotElement.textContent = studentName.substring(0, 3);
+            flyingName.style.transition = 'opacity 0.2s ease-out'; flyingName.style.opacity = '0';
+            await new Promise(resolve => setTimeout(resolve, 200));
+            if (flyingName.parentNode === document.body) { document.body.removeChild(flyingName); }
+        }
+
+        function animateSlotsRejection(schoolName, quotaTypeKey) {
+            if (currentMode === 'fast-forward') return;
+            const school = schoolsData[schoolName]; if (!school || !school.quotas[quotaTypeKey]) return;
+            school.quotas[quotaTypeKey].slots.forEach(slotElement => { if (slotElement && slotElement.classList.contains('filled')) { slotElement.classList.add('slot-rejection'); setTimeout(() => { slotElement.classList.remove('slot-rejection'); }, 500); } });
+        }
+
+        let currentStudentIndex = 0, currentChoiceIndex = 0, processingSubStep = 'select_student'; let currentAdmittedCount = 0, currentFailedAdmissionCount = 0, logStep = 1;
+        const MANUAL_STUDENTS_START = 3, FAST_FORWARD_COUNT = 15; let manualStudentsProcessedStart = 0, fastForwardStudentsProcessed = 0;
+        let currentMode = 'manual_initial', isProcessingStep = false, isAnimatingFastForward = false;
+
+        function resetSimulation() {
+            initializeDOMReferences(); initializeSchools(); studentsData = generateStudentData(); renderSchools(); renderStudents();
+            currentStudentIndex = 0; currentChoiceIndex = 0; processingSubStep = 'select_student';
+            currentAdmittedCount = 0; currentFailedAdmissionCount = 0; logStep = 1;
+            manualStudentsProcessedStart = 0; fastForwardStudentsProcessed = 0;
+            currentMode = 'manual_initial'; isProcessingStep = false; coreSceneMessageQueue = [];
+            if (logContent) logContent.innerHTML = '';
+            document.querySelectorAll('.score-lines').forEach(div => div.innerHTML = '');
+            updateStatsUI();
+            if (nextStepBtn) nextStepBtn.disabled = false; if (fastForwardBtn) fastForwardBtn.disabled = true;
+            addLog("模拟已重置，请开始。");
+        }
+
+        async function handleNextStep() {
+            if (isProcessingStep || currentMode === 'done' || (isModalOpen && currentMode !== 'fast-forward')) return;
+            isProcessingStep = true; if (nextStepBtn) nextStepBtn.disabled = true;
+
+            try {
+                const student = studentsData[currentStudentIndex];
+                if (!student) { await addLog("错误：当前学生数据未找到或已处理完毕。"); currentMode = 'done'; if (currentStudentIndex >= studentsData.length) await checkSchoolUnfilled(); return; }
+                const studentRow = document.getElementById(`student-row-${student.rank}`);
+                if (studentRow && currentMode !== 'fast-forward') { studentRow.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }); await new Promise(rV => setTimeout(rV, 100)); }
+
+                if (currentMode === 'manual_initial' && manualStudentsProcessedStart >= MANUAL_STUDENTS_START && processingSubStep === 'select_student') { if (fastForwardBtn) fastForwardBtn.disabled = false; await addLog(`初始手动演示完成(${MANUAL_STUDENTS_START}名学生)。可快速投档。`) }
+                if (currentMode === 'fast-forward' && fastForwardStudentsProcessed >= FAST_FORWARD_COUNT && processingSubStep === 'select_student') { currentMode = 'manual_final'; if (fastForwardBtn) fastForwardBtn.disabled = true; await addLog(`快速投档完成(${FAST_FORWARD_COUNT}名学生)。恢复手动。`) }
+
+                if (processingSubStep === 'select_student') {
+                    if (currentStudentIndex >= studentsData.length) { currentMode = 'done'; await addLog("所有考生处理完毕。"); await checkSchoolUnfilled(); return }
+                    document.querySelectorAll('.student-row.processing').forEach(r => r.classList.remove('processing'));
+                    if (studentRow) studentRow.classList.add('processing');
+                    await addLog(`开始处理考生:${student.name}(分数:${student.score},身份:${student.status})`);
+                    currentChoiceIndex = 0; processingSubStep = 'check_choice';
+                }
+                else if (processingSubStep === 'check_choice') {
+                    if (studentRow) { const pcc = studentRow.querySelector('.choice-cell.checking'); if (pcc) pcc.classList.remove('checking') }
+                    if (currentChoiceIndex >= (student.choices || []).length) {
+                        student.admissionResult = '滑档'; student.admissionRemark = '滑档'; student.processed = true;
+                        if (studentRow) { studentRow.classList.add('processed'); studentRow.classList.remove('processing'); studentRow.querySelector('.admission-result').textContent = '滑档'; studentRow.querySelector('.admission-remark').textContent = '滑档' }
+                        currentFailedAdmissionCount++; updateStatsUI();
+                        const hm = `考生 ${student.name}(分数:${student.score},${student.status})所有志愿均未录取,滑档。`;
+                        await addLog(hm, true); await showModal("考生滑档", hm);
+                        currentStudentIndex++; processingSubStep = 'select_student';
+                        if (currentMode === 'manual_initial') manualStudentsProcessedStart++; else if (currentMode === 'fast-forward') fastForwardStudentsProcessed++;
+                    } else {
+                        const csn = (student.choices || [])[currentChoiceIndex];
+                        if (studentRow) { const cc = studentRow.cells[4 + currentChoiceIndex]; if (cc) cc.classList.add('checking') }
+                        await addLog(`${student.name}:检索志愿${String.fromCharCode(65 + currentChoiceIndex)}(${csn})`);
+                        processingSubStep = 'attempt_admission';
+                    }
+                }
+                else if (processingSubStep === 'attempt_admission') {
+                    const csn = (student.choices || [])[currentChoiceIndex]; const school = schoolsData[csn];
+                    if (!school) { await addLog(`错误:${student.name}志愿学校${csn}未找到`); currentChoiceIndex++; processingSubStep = 'check_choice'; return }
+                    let admitted = false, admissionTypeKey = '', admissionTypeDisplay = '';
+                    if (student.status === '统招') {
+                        if (school.quotas.tongzhao.filled < school.quotas.tongzhao.total) { admissionTypeKey = 'tongzhao'; admissionTypeDisplay = '统招'; admitted = true; await addLog(`${student.name}:尝试${csn} ${admissionTypeDisplay}名额...成功`) }
+                        else { animateSlotsRejection(csn, 'tongzhao'); await addLog(`${student.name}:尝试${csn}统招名额...已满`); if (school.quotas.tiaoji.filled < school.quotas.tiaoji.total) { admissionTypeKey = 'tiaoji'; admissionTypeDisplay = '调剂'; admitted = true; await addLog(`${student.name}:尝试${csn} ${admissionTypeDisplay}名额...成功(转调剂)`) } else { if (school.quotas.tiaoji.total > 0) animateSlotsRejection(csn, 'tiaoji'); await addLog(`${student.name}:尝试${csn}调剂名额...已满`) } }
+                    } else {
+                        if (school.quotas.tiaoji.filled < school.quotas.tiaoji.total) { admissionTypeKey = 'tiaoji'; admissionTypeDisplay = '调剂'; admitted = true; await addLog(`${student.name}:尝试${csn} ${admissionTypeDisplay}名额...成功`) }
+                        else { animateSlotsRejection(csn, 'tiaoji'); await addLog(`${student.name}:尝试${csn}调剂名额...已满`) }
+                    }
+
+                    if (admitted) {
+                        student.admissionResult = `${csn}(${admissionTypeDisplay})`; student.admissionRemark = `${String.fromCharCode(65 + currentChoiceIndex)}志愿录取`; student.admissionSchoolName = csn; student.admissionType = admissionTypeKey; student.processed = true;
+                        const qg = school.quotas[admissionTypeKey]; const se = qg.slots[qg.filled];
+                        const sae = studentRow ? studentRow.cells[4 + currentChoiceIndex] : null;
+                        if (currentMode !== 'fast-forward' || (currentMode === 'fast-forward' && !isAnimatingFastForward)) { if (currentMode === 'fast-forward') isAnimatingFastForward = true; await animateFlyIn(student.name, sae, se); if (currentMode === 'fast-forward') isAnimatingFastForward = false } else { if (se) se.textContent = student.name.substring(0, 3) }
+                        if (se) se.classList.add('filled', admissionTypeKey); qg.students.push(student.name); qg.filled++;
+                        const fcs = document.getElementById(`filled-${csn}-${admissionTypeKey}`); if (fcs) fcs.textContent = qg.filled;
+                        if (qg.filled === qg.total) {
+                            school[`${admissionTypeKey}ScoreLine`] = student.score;
+                            const slt = `${admissionTypeDisplay}线:${student.score}分`;
+                            const sld = document.getElementById(`score-lines-${csn}`); if (sld) { let pe = sld.querySelector(`.${admissionTypeKey}-line`); if (!pe) { pe = document.createElement('p'); pe.classList.add(`${admissionTypeKey}-line`); sld.appendChild(pe) } pe.textContent = slt }
+                            const fsm = `${csn} ${admissionTypeDisplay}名额已满。${slt}`;
+                            await addLog(fsm, true); await showModal("分数线形成", fsm);
+                        }
+                        if (studentRow) { studentRow.classList.add('processed'); studentRow.classList.remove('processing'); studentRow.querySelector('.admission-result').textContent = student.admissionResult; studentRow.querySelector('.admission-remark').textContent = student.admissionRemark; const cc = studentRow.querySelector('.choice-cell.checking'); if (cc) cc.classList.remove('checking') }
+                        currentAdmittedCount++; updateStatsUI(); await addLog(`${student.name}:录取至 ${student.admissionResult}.投档结束.`);
+                        currentStudentIndex++; processingSubStep = 'select_student';
+                        if (currentMode === 'manual_initial') manualStudentsProcessedStart++; else if (currentMode === 'fast-forward') fastForwardStudentsProcessed++;
+                    } else {
+                        await addLog(`${student.name}: ${csn} 无可用名额。将检索下一个志愿。`);
+                        currentChoiceIndex++; processingSubStep = 'check_choice';
+                    }
+                }
+            } catch (e) { console.error("Error in handleNextStep:", e); await addLog(`系统错误:${e.message}.`); currentStudentIndex++; processingSubStep = 'select_student'; }
+            finally { isProcessingStep = false; if (!isModalOpen && nextStepBtn) nextStepBtn.disabled = (currentMode === 'done'); }
+        }
+
+        async function checkSchoolUnfilled() {
+            for (const n of SCHOOL_NAMES) {
+                const s = schoolsData[n]; if (!s) continue;
+                if (s.quotas.tongzhao.filled < s.quotas.tongzhao.total) { const ut = `学校${n}统招计划未录满(断档).空余:${s.quotas.tongzhao.total - s.quotas.tongzhao.filled}`; await addLog(ut, true); await showModal("学校断档:统招", ut) }
+                if (s.quotas.tiaoji.filled < s.quotas.tiaoji.total) { const ut = `学校${n}调剂计划未录满(断档).空余:${s.quotas.tiaoji.total - s.quotas.tiaoji.filled}`; await addLog(ut, true); await showModal("学校断档:调剂", ut) }
+            }
+        }
+        async function startFastForward() {
+            if (currentMode !== 'manual_initial' || manualStudentsProcessedStart < MANUAL_STUDENTS_START) { await addLog("请先完成初始手动演示阶段。"); return } currentMode = 'fast-forward'; if (fastForwardBtn) fastForwardBtn.disabled = true; if (nextStepBtn) nextStepBtn.disabled = true; await addLog("开始快速投档..."); let ffi = 0;
+            while (fastForwardStudentsProcessed < FAST_FORWARD_COUNT && currentStudentIndex < studentsData.length && currentMode === 'fast-forward') {
+                await handleNextStep();
+                await new Promise(rV => setTimeout(rV, 5));
+                ffi++; if (ffi > (FAST_FORWARD_COUNT * 15 + 50)) { await addLog("快速投档迭代过多中止。"); currentMode = 'manual_final'; break }
+            }
+            if (currentMode === 'fast-forward' || currentMode === 'manual_final') {
+                if (fastForwardStudentsProcessed >= FAST_FORWARD_COUNT || currentStudentIndex >= studentsData.length) {
+                    currentMode = currentStudentIndex >= studentsData.length ? 'done' : 'manual_final';
+                    await addLog(`快速投档阶段结束 (${fastForwardStudentsProcessed}名学生处理)。${currentMode === 'done' ? '所有考生处理完毕。' : '恢复手动演示。'}`);
+                    if (currentMode === 'done') await checkSchoolUnfilled();
+                } else {
+                    currentMode = 'manual_final'; await addLog(`快速投档提前结束。恢复手动演示。`);
+                }
+            }
+            if (fastForwardBtn) fastForwardBtn.disabled = true;
+            if (!isModalOpen && nextStepBtn) nextStepBtn.disabled = (currentMode === 'done');
+        }
+
+        function setupEventListeners() {
+            if (!nextStepBtn || !fastForwardBtn || !resetBtn || !modalCloseBtn) { console.error("Cannot setup listeners: Buttons missing."); return }
+            nextStepBtn.addEventListener('click', handleNextStep);
+            document.addEventListener('keydown', (e) => {
+                if ((e.code === 'Space' || e.code === 'PageDown') && nextStepBtn && !nextStepBtn.disabled && !isModalOpen) { e.preventDefault(); handleNextStep() }
+                if ((e.code === 'Space' || e.code === 'PageDown') && isModalOpen && modalCloseBtn) { e.preventDefault(); modalCloseBtn.click() }
+            });
+            fastForwardBtn.addEventListener('click', startFastForward); resetBtn.addEventListener('click', resetSimulation);
+            modalCloseBtn.addEventListener('click', () => { if (!modalOverlay) return; modalOverlay.classList.remove('visible'); isModalOpen = false; if (currentMode !== 'done' && nextStepBtn) { nextStepBtn.disabled = false } if (currentMode === 'manual_initial' && manualStudentsProcessedStart >= MANUAL_STUDENTS_START && fastForwardBtn) { fastForwardBtn.disabled = false } if (afterModalAction) { const tempAction = afterModalAction; afterModalAction = null; tempAction(); } });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDOMReferences();
+            setupEventListeners();
+            if (statsUI && statsUI.totalSchools) statsUI.totalSchools.textContent = SCHOOL_NAMES.length;
+            else console.error("DOMContentLoaded: statsUI or totalSchools is null.");
+            resetSimulation();
+        });
+    </script>
+</body>
+
+</html>
