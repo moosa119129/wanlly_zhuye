@@ -1,9 +1,14 @@
 export interface School {
-    id: number
+    id: string | number
     name: string
     score: number
     tags: string[]
     location?: string
+    provincialKey?: boolean
+    probability?: number
+    type?: string
+    ranking?: number
+    scoreLine3Years?: { year: number; score: number; rank: number }[]
 }
 
 export interface UserProfile {

@@ -39,7 +39,7 @@ export function SchoolTooltip({ school, children }: SchoolTooltipProps) {
                             <span className="text-slate-200 font-mono">{school.ranking}</span>
                         </div>
                         <div className="text-slate-500 text-[10px] mt-1">近3年分数线:</div>
-                        {school.scoreLine3Years.map(line => (
+                        {school.scoreLine3Years?.map(line => (
                             <div key={line.year} className="flex justify-between text-[10px] text-slate-400">
                                 <span>{line.year}</span>
                                 <span className="font-mono">{line.score}分 / {line.rank}位</span>

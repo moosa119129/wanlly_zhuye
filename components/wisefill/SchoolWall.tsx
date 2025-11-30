@@ -58,7 +58,7 @@ export function SchoolWall({ schools, isPaused, highlightedSchools }: SchoolWall
                     <div id={`school-card-${school.id}`} key={`${school.id}-${index}`}>
                         <SchoolCard
                             school={school}
-                            isHighlighted={highlightedSchools.includes(school.id)}
+                            isHighlighted={highlightedSchools.includes(String(school.id))}
                         />
                     </div>
                 ))}
