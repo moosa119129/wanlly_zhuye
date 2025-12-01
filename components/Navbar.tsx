@@ -7,10 +7,10 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 const navItems = [
     { name: "首页", href: "/" },
-    { name: "视频", href: "/videos" },
-    { name: "观点", href: "/insights" },
-    { name: "AI应用", href: "/ai-lab" },
-    { name: "课程", href: "/courses" },
+    { name: "观看视频", href: "/videos" },
+    { name: "教育文章", href: "/insights" },
+    { name: "AI工具", href: "/ai-lab" },
+    { name: "精品课程", href: "/courses" },
 ];
 
 export default function Navbar() {
