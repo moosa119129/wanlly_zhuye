@@ -16,11 +16,12 @@ export default async function CoursesPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <PageHeader
-                title="精选课程"
+                title="🎓 精选课程"
                 description="来自资深教育专家的升学规划与志愿填报指南，助你轻松应对升学挑战。"
+                align="left"
             />
             <div className="container py-12 px-4 md:px-6">
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
                     {courses.map((course) => {
                         const features = JSON.parse(course.features) as string[]
                         return (
