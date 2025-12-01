@@ -3,7 +3,14 @@ import { notFound } from "next/navigation";
 import { formatDistance } from "date-fns";
 import { zhCN } from "date-fns/locale";
 
-export const dynamic = 'force-dynamic';
+export async function generateStaticParams() {
+    const articles = await prisma.article.findMany({
+        select: { slug: true }
+    });
+    return articles.map((article) => ({
+        slug: article.slug,
+    }));
+}
 
 interface ArticlePageProps {
     params: {
@@ -12,11 +19,9 @@ interface ArticlePageProps {
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-    const article = await prisma.article.findFirst({
-        where: {
-            slug: params.slug,
-            published: true
-        }
+    const { slug } = params;
+    const article = await prisma.article.findUnique({
+        where: { slug }
     });
 
     if (!article) {
