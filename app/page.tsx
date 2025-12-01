@@ -43,12 +43,13 @@ export default function Home() {
                     <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-16 xl:grid-cols-[1fr_500px]">
                         <div className="flex flex-col justify-center">
                             {/* Title with larger bottom margin */}
-                            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl xl:text-8xl text-white drop-shadow-2xl mb-10 leading-tight">
+                            {/* Title with larger bottom margin */}
+                            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl text-white drop-shadow-2xl mb-6 leading-tight whitespace-nowrap">
                                 看见数据，预见前程
                             </h1>
 
                             {/* Description with larger bottom margin */}
-                            <p className="max-w-[600px] text-blue-50 text-lg md:text-xl lg:text-2xl drop-shadow-lg leading-relaxed mb-12">
+                            <p className="max-w-[800px] text-blue-50 text-base md:text-lg lg:text-xl drop-shadow-lg leading-relaxed mb-8 whitespace-nowrap">
                                 汇聚升学数据，打通K12教育到职业规划全链路服务闭环
                             </p>
 

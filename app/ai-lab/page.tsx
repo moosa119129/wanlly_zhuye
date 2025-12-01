@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 
-export const dynamic = 'force-dynamic';
+
 
 export default async function AILabPage() {
     const demos = await prisma.appDemo.findMany({

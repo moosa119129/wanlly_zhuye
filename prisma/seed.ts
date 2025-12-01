@@ -92,6 +92,36 @@ async function main() {
             }
         ]
     })
+
+    // 插入课程数据
+    await prisma.course.createMany({
+        data: [
+            {
+                title: "中考志愿填报：从入门到精通",
+                description: "全面解析中考政策，教你如何科学填报志愿，规避风险，锁定理想高中。",
+                coverImage: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070",
+                price: "¥99",
+                features: JSON.stringify(["政策解读", "数据分析", "案例实战", "一对一答疑"]),
+                linkUrl: "https://www.bilibili.com/"
+            },
+            {
+                title: "高中生涯规划与选科指导",
+                description: "提前规划高中三年，科学选择选考科目，为高考打下坚实基础。",
+                coverImage: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=2074",
+                price: "¥199",
+                features: JSON.stringify(["生涯测评", "选科策略", "大学专业关联", "名校学长分享"]),
+                linkUrl: "https://www.bilibili.com/"
+            },
+            {
+                title: "高效学习法：引爆你的学习力",
+                description: "掌握科学的学习方法，提升记忆力、专注力和理解力，让学习事半功倍。",
+                coverImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070",
+                price: "¥59",
+                features: JSON.stringify(["费曼学习法", "番茄工作法", "思维导图", "错题管理"]),
+                linkUrl: "https://www.bilibili.com/"
+            }
+        ]
+    })
 }
 
 
