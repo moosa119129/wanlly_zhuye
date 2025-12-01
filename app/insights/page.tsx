@@ -5,7 +5,7 @@ import Link from "next/link";
 import { formatDistance } from "date-fns";
 import { zhCN } from "date-fns/locale";
 
-export const dynamic = 'force-dynamic';
+
 
 export default async function InsightsPage() {
     const articles = await prisma.article.findMany({
