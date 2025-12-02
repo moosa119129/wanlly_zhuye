@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 export const dynamic = 'force-dynamic'
 
 export default async function VideosPage() {
-    let videos = []
+    let videos: Awaited<ReturnType<typeof prisma.video.findMany>> = []
     try {
         videos = await prisma.video.findMany()
     } catch (error) {
