@@ -9,9 +9,15 @@ import { zhCN } from "date-fns/locale";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminArticlesPage() {
-    const articles = await prisma.article.findMany({
-        orderBy: { updatedAt: 'desc' }
-    });
+    let articles: Awaited<ReturnType<typeof prisma.article.findMany>> = []
+    try {
+        articles = await prisma.article.findMany({
+            orderBy: { updatedAt: 'desc' }
+        })
+    } catch (error) {
+        console.error("Failed to fetch articles:", error)
+        articles = []
+    }
 
     return (
         <div className="container py-12 px-4 md:px-6">

@@ -9,9 +9,15 @@ import { prisma } from "@/lib/prisma"
 import { PageHeader } from "@/components/page-header"
 
 export default async function CoursesPage() {
-    const courses = await prisma.course.findMany({
-        orderBy: { id: 'asc' }
-    })
+    let courses: Awaited<ReturnType<typeof prisma.course.findMany>> = []
+    try {
+        courses = await prisma.course.findMany({
+            orderBy: { id: 'asc' }
+        })
+    } catch (error) {
+        console.error("Failed to fetch courses:", error)
+        courses = []
+    }
 
     return (
         <div className="flex flex-col min-h-screen">

@@ -8,9 +8,15 @@ import { PageHeader } from "@/components/page-header";
 export const dynamic = 'force-dynamic'
 
 export default async function AILabPage() {
-    const demos = await prisma.appDemo.findMany({
-        orderBy: { id: 'desc' }
-    });
+    let demos: Awaited<ReturnType<typeof prisma.appDemo.findMany>> = []
+    try {
+        demos = await prisma.appDemo.findMany({
+            orderBy: { id: 'desc' }
+        })
+    } catch (error) {
+        console.error("Failed to fetch demos:", error)
+        demos = []
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
