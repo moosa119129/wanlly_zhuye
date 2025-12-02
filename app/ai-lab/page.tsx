@@ -5,6 +5,8 @@ import { PageHeader } from "@/components/page-header";
 
 
 
+export const dynamic = 'force-dynamic'
+
 export default async function AILabPage() {
     const demos = await prisma.appDemo.findMany({
         orderBy: { id: 'desc' }

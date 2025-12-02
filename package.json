@@ -52,6 +52,7 @@
     "@netlify/plugin-nextjs": "^5.9.1",
     "@prisma/client": "^5.22.0",
     "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/turndown": "^5.0.6",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.22",
