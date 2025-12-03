@@ -1,22 +1,10 @@
-import { prisma } from "@/lib/prisma";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
+import { APP_DEMOS } from "@/lib/static-data";
 
-
-
-export const dynamic = 'force-dynamic'
-
-export default async function AILabPage() {
-    let demos: Awaited<ReturnType<typeof prisma.appDemo.findMany>> = []
-    try {
-        demos = await prisma.appDemo.findMany({
-            orderBy: { id: 'desc' }
-        })
-    } catch (error) {
-        console.error("Failed to fetch demos:", error)
-        demos = []
-    }
+export default function AILabPage() {
+    const demos = APP_DEMOS
 
     return (
         <div className="flex flex-col min-h-screen">

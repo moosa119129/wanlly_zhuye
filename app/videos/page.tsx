@@ -1,20 +1,8 @@
-import { PrismaClient } from '@prisma/client'
 import { PageHeader } from "@/components/page-header";
+import { VIDEOS } from "@/lib/static-data";
 
-const prisma = new PrismaClient()
-
-
-
-export const dynamic = 'force-dynamic'
-
-export default async function VideosPage() {
-    let videos: Awaited<ReturnType<typeof prisma.video.findMany>> = []
-    try {
-        videos = await prisma.video.findMany()
-    } catch (error) {
-        console.error("Failed to fetch videos:", error)
-        videos = []
-    }
+export default function VideosPage() {
+    const videos = VIDEOS
 
     const depthVideos = videos.filter(v => v.category === '深度解析')
     const learningVideos = videos.filter(v => v.category === '学习力提升')

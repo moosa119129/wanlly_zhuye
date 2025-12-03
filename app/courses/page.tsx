@@ -4,20 +4,12 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, PlayCircle } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { prisma } from "@/lib/prisma"
+import { COURSES } from "@/lib/static-data"
 
 import { PageHeader } from "@/components/page-header"
 
-export default async function CoursesPage() {
-    let courses: Awaited<ReturnType<typeof prisma.course.findMany>> = []
-    try {
-        courses = await prisma.course.findMany({
-            orderBy: { id: 'asc' }
-        })
-    } catch (error) {
-        console.error("Failed to fetch courses:", error)
-        courses = []
-    }
+export default function CoursesPage() {
+    const courses = COURSES
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -28,7 +20,7 @@ export default async function CoursesPage() {
             <div className="container py-12 px-4 md:px-6">
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
                     {courses.map((course) => {
-                        const features = JSON.parse(course.features) as string[]
+                        const features = course.features
                         return (
                             <Card key={course.id} className="flex flex-col overflow-hidden border-muted/40 shadow-sm hover:shadow-md transition-shadow">
                                 <div className="aspect-video relative bg-muted">
