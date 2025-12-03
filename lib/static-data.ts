@@ -112,6 +112,14 @@ export const APP_DEMOS: AppDemo[] = [
         status: "Live",
         linkUrl: "/ai-lab/wisefill",
         coverImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97"
+    },
+    {
+        id: 3,
+        title: "ROI Focus - 工作投资组合管理",
+        description: "基于ROI思维的时间管理工具，像经营公司一样经营你的时间。包含看板、甘特图和AI投资顾问分析。",
+        status: "Beta",
+        linkUrl: "/ai-lab/roi-focus",
+        coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015"
     }
 ]
 
@@ -170,7 +178,8 @@ export const COURSES: Course[] = [
         linkUrl: "https://www.bilibili.com/",
         createdAt: new Date(),
         updatedAt: new Date()
-    }
+    },
+
 ]
 
 export const ARTICLES: Article[] = [
