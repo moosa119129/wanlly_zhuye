@@ -1,6 +1,14 @@
 import { PageHeader } from "@/components/page-header";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { formatDistance } from "date-fns";
+import { zhCN } from "date-fns/locale";
+import { ARTICLES } from "@/lib/static-data";
 
 export default function InsightsPage() {
+    const articles = ARTICLES.filter(a => a.published)
+
     return (
         <div className="flex flex-col min-h-screen">
             <PageHeader
@@ -8,15 +16,53 @@ export default function InsightsPage() {
                 description="深度文章与独立见解,记录成长与思考的轨迹。"
             />
             <div className="container py-12 px-4 md:px-6">
-                <div className="text-center py-12">
-                    <div className="max-w-md mx-auto space-y-4">
-                        <div className="text-6xl">🚧</div>
-                        <h2 className="text-2xl font-bold">页面维护中</h2>
-                        <p className="text-muted-foreground">
-                            我们正在升级文章系统,敬请期待...
-                        </p>
+                {articles.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {articles.map((article) => (
+                            <Link key={article.id} href={`/insights/${article.slug}`} className="group">
+                                <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer overflow-hidden flex flex-col">
+                                    {article.coverImage && (
+                                        <div className="aspect-video bg-muted relative overflow-hidden">
+                                            <img
+                                                src={article.coverImage}
+                                                alt={article.title}
+                                                referrerPolicy="no-referrer"
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                            <div className="absolute top-2 right-2">
+                                                <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
+                                                    {article.category}
+                                                </Badge>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <CardHeader className="flex-1">
+                                        <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
+                                            {article.title}
+                                        </CardTitle>
+                                        {article.excerpt && (
+                                            <CardDescription className="line-clamp-3 mt-2">
+                                                {article.excerpt}
+                                            </CardDescription>
+                                        )}
+                                        {article.publishedAt && (
+                                            <p className="text-xs text-muted-foreground mt-2">
+                                                {formatDistance(new Date(article.publishedAt), new Date(), {
+                                                    addSuffix: true,
+                                                    locale: zhCN
+                                                })}
+                                            </p>
+                                        )}
+                                    </CardHeader>
+                                </Card>
+                            </Link>
+                        ))}
                     </div>
-                </div>
+                ) : (
+                    <div className="text-center py-12 text-muted-foreground">
+                        <p>暂无文章，敬请期待...</p>
+                    </div>
+                )}
             </div>
         </div>
     );

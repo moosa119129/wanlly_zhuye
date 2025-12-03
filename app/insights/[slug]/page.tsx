@@ -1,5 +1,54 @@
-import { redirect } from "next/navigation";
+import { ARTICLES } from "@/lib/static-data";
+import { PageHeader } from "@/components/page-header";
+import { Badge } from "@/components/ui/badge";
+import { notFound } from "next/navigation";
 
-export default function ArticleDetailPage() {
-    redirect("/insights");
+export async function generateStaticParams() {
+    return ARTICLES.map((article) => ({
+        slug: article.slug
+    }))
+}
+
+interface ArticlePageProps {
+    params: {
+        slug: string
+    }
+}
+
+export default function ArticleDetailPage({ params }: ArticlePageProps) {
+    const article = ARTICLES.find(a => a.slug === params.slug)
+
+    if (!article) {
+        notFound()
+    }
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <PageHeader
+                title={article.title}
+                description={article.excerpt || ''}
+            />
+            <div className="container max-w-4xl py-12 px-4 md:px-6">
+                {article.coverImage && (
+                    <div className="aspect-video relative rounded-lg overflow-hidden mb-8">
+                        <img
+                            src={article.coverImage}
+                            alt={article.title}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                )}
+                <div className="flex items-center gap-4 mb-8 text-sm text-muted-foreground">
+                    <Badge variant="secondary">{article.category}</Badge>
+                    {article.publishedAt && (
+                        <time>{new Date(article.publishedAt).toLocaleDateString('zh-CN')}</time>
+                    )}
+                </div>
+                <div
+                    className="prose prose-lg dark:prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: article.content }}
+                />
+            </div>
+        </div>
+    );
 }
