@@ -24,7 +24,7 @@ export default function Navbar() {
                     <Link href="/" className="mr-6 flex items-center space-x-2">
                         <img src="/mm_dad_logo.jpg" alt="Logo" className="w-8 h-8 rounded-full" />
                         <span className="hidden font-bold sm:inline-block">
-                            MM's DAD
+                            LightYear Algorithm
                         </span>
                     </Link>
                     <nav className="flex items-center gap-6 text-sm">

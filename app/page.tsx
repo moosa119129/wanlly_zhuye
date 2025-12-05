@@ -45,12 +45,12 @@ export default function Home() {
                             {/* Title with larger bottom margin */}
                             {/* Title with larger bottom margin */}
                             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl text-white drop-shadow-2xl mb-6 leading-tight whitespace-nowrap">
-                                看见数据，预见前程
+                                内修算力，外决前程
                             </h1>
 
                             {/* Description with larger bottom margin */}
                             <p className="max-w-[800px] text-blue-50 text-base md:text-lg lg:text-xl drop-shadow-lg leading-relaxed mb-8 whitespace-nowrap">
-                                汇聚升学数据，打通K12教育到职业规划全链路服务闭环
+                                教育不是博弈，让努力有算法，未来有方向
                             </p>
 
                             {/* Buttons */}
@@ -64,14 +64,21 @@ export default function Home() {
                             </div>
                         </div>
 
-                        {/* Avatar with white edge removal */}
+                        {/* Avatar with soft rounded rectangular border and shadow */}
                         <div className="flex items-center justify-center">
-                            <div className="relative h-[320px] w-[320px] sm:h-[420px] sm:w-[420px] rounded-full overflow-hidden border-4 border-blue-400/50 shadow-2xl shadow-blue-500/30 bg-gradient-to-br from-slate-800 to-slate-900">
-                                <img
-                                    src="/avatar.png"
-                                    alt="Wanlly"
-                                    className="object-cover w-full h-full scale-110 object-[center_20%]"
-                                />
+                            <div className="relative h-[350px] w-[350px] sm:h-[450px] sm:w-[450px] group">
+                                {/* Soft glow/shadow behind */}
+                                <div className="absolute inset-4 bg-blue-600/20 blur-3xl rounded-[2.5rem] group-hover:bg-blue-600/30 transition-all duration-500" />
+
+                                {/* Image container with border and shadow */}
+                                <div className="relative w-full h-full transition-all duration-500 group-hover:scale-[1.02]">
+                                    <div className="absolute inset-0 rounded-[2rem] border-2 border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.3)] pointer-events-none z-20" />
+                                    <img
+                                        src="/cover.png"
+                                        alt="Cover Image"
+                                        className="object-cover w-full h-full rounded-[2rem] shadow-2xl"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
