@@ -5,7 +5,7 @@ import { Compass, Map, Zap, Wrench, Brain, School, Home, Users, Search, Target, 
 
 export default function GrowthModel() {
     return (
-        <div className="w-full relative overflow-hidden bg-[#050b14] rounded-3xl border border-white/10 p-8 md:p-12">
+        <div className="w-full relative overflow-hidden bg-[#050b14] rounded-3xl border border-white/10 p-6 md:p-8">
             {/* Background Layers */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[url('/cyberpunk-bg.png')] bg-cover bg-center opacity-40"></div>
@@ -13,18 +13,19 @@ export default function GrowthModel() {
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.05)_1px,transparent_1px)] bg-[length:30px_30px] opacity-20"></div>
             </div>
 
-            <div className="relative z-10 flex flex-col items-center gap-12">
+            <div className="relative z-10 flex flex-col items-center gap-8">
                 <header className="text-center relative">
                     <div className="absolute -inset-4 bg-[#00f3ff]/20 blur-3xl rounded-full opacity-20"></div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-wider drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 tracking-wider drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">
                         <span className="text-[#00f3ff]">LIGHTYEAR</span> ALGORITHM
                     </h2>
-                    <p className="text-[#00f3ff]/80 text-sm md:text-lg tracking-[0.5em] uppercase font-mono">Holographic Growth Model</p>
+                    <h3 className="text-xl md:text-2xl font-bold text-white mt-2 tracking-widest">光年算法成长模型</h3>
+                    <p className="text-[#00f3ff]/80 text-xs md:text-sm tracking-[0.5em] uppercase font-mono mt-2">Holographic Growth Model</p>
                     <div className="h-1 w-32 bg-gradient-to-r from-transparent via-[#00f3ff] to-transparent mx-auto mt-4"></div>
                 </header>
 
                 {/* Top Section: Inputs (Unified Container) */}
-                <div className="w-full relative border-2 border-[#00f3ff]/30 rounded-3xl p-8 bg-white/5 backdrop-blur-sm shadow-[0_0_30px_rgba(0,243,255,0.1)]">
+                <div className="w-full relative border-2 border-[#00f3ff]/30 rounded-3xl p-6 bg-white/5 backdrop-blur-sm shadow-[0_0_30px_rgba(0,243,255,0.1)] mb-4">
                     {/* Label for the Unified Box */}
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#050b14] px-6 py-1 border border-[#00f3ff]/30 rounded-full text-[#00f3ff] font-mono text-xs tracking-widest shadow-[0_0_10px_rgba(0,243,255,0.2)]">
                         GROWTH FACTORS
@@ -71,7 +72,7 @@ export default function GrowthModel() {
                                                 </div>
                                             </div>
                                             <div className="text-right hidden md:block">
-                                                <span className="text-xs text-gray-300">升学路径 / 逻辑层次</span>
+                                                <span className="text-xs text-gray-300">升学规划 / NLP</span>
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +89,7 @@ export default function GrowthModel() {
                                                 </div>
                                             </div>
                                             <div className="text-right hidden md:block">
-                                                <span className="text-xs text-gray-300">动力 / 执行力 / 习惯</span>
+                                                <span className="text-xs text-gray-300">注意力 / 动力 / 执行力</span>
                                             </div>
                                         </div>
                                     </div>
@@ -105,7 +106,7 @@ export default function GrowthModel() {
                                                 </div>
                                             </div>
                                             <div className="text-right hidden md:block">
-                                                <span className="text-xs text-gray-300">手册 / 课程 / 系统</span>
+                                                <span className="text-xs text-gray-300">手册 / 课程 / 服务</span>
                                             </div>
                                         </div>
                                     </div>
@@ -137,9 +138,16 @@ export default function GrowthModel() {
                                 </div>
                             </div>
 
-                            {/* Interaction Node (Dynamic Animation) */}
-                            <div className="relative flex items-center justify-center w-32 h-32">
-                                {/* Orbiting Particles */}
+                            {/* Interaction Node (Enhanced Synergy Animation) */}
+                            <div className="relative flex items-center justify-center w-40 h-40">
+                                {/* Outer Ring: External Influence (Purple) */}
+                                <div className="absolute inset-0 border-2 border-dashed border-purple-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                                <div className="absolute inset-2 border border-purple-500/20 rounded-full animate-[spin_10s_linear_infinite_reverse]"></div>
+
+                                {/* Inner Ring: Internal Influence (Blue) */}
+                                <div className="absolute inset-8 border-2 border-dashed border-[#00f3ff]/30 rounded-full animate-[spin_6s_linear_infinite_reverse]"></div>
+
+                                {/* Orbiting Particles representing Interaction */}
                                 <div className="absolute inset-0 animate-[spin_4s_linear_infinite]">
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#00f3ff] rounded-full blur-[2px] shadow-[0_0_10px_#00f3ff]"></div>
                                 </div>
@@ -147,12 +155,14 @@ export default function GrowthModel() {
                                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full blur-[2px] shadow-[0_0_10px_#a855f7]"></div>
                                 </div>
 
-                                {/* Central Core */}
-                                <div className="relative z-10 bg-black/80 border border-white/20 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-xl shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                {/* Central Core: The Spark of Result (Gold) */}
+                                <div className="relative z-10 bg-black/80 border border-[#ffd700]/50 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-xl shadow-[0_0_30px_rgba(255,215,0,0.3)] animate-pulse">
+                                    <div className="w-4 h-4 bg-[#ffd700] rounded-full shadow-[0_0_15px_#ffd700]"></div>
                                 </div>
 
-                                <div className="absolute -bottom-6 text-white/50 font-mono text-[10px] tracking-widest">INTERACTION</div>
+                                <div className="absolute -bottom-8 text-white/50 font-mono text-[10px] tracking-widest text-center">
+                                    SYNERGY<br />FIELD
+                                </div>
                             </div>
 
                         </div>
@@ -200,16 +210,16 @@ export default function GrowthModel() {
 
                     </div>
 
-                    {/* Downward Triangle Pointer */}
-                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
+                    {/* Downward Triangle Pointer - Adjusted Position */}
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
                         {/* Triangle Shape using CSS borders */}
                         <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-[#00f3ff] filter drop-shadow-[0_0_10px_rgba(0,243,255,0.8)] animate-bounce"></div>
                     </div>
                 </div>
 
                 {/* Bottom Section: Result */}
-                <div className="w-full max-w-4xl z-10 mt-8">
-                    <div className="relative w-full bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-[#ffd700] flex flex-col md:flex-row items-center justify-between p-8 text-center md:text-left shadow-[0_0_30px_rgba(255,215,0,0.15)] group overflow-hidden hover:scale-[1.02] transition-transform duration-500">
+                <div className="w-full max-w-4xl z-10 mt-2">
+                    <div className="relative w-full bg-white/5 backdrop-blur-sm rounded-2xl border-2 border-[#ffd700] flex flex-col md:flex-row items-center justify-between p-6 text-center md:text-left shadow-[0_0_30px_rgba(255,215,0,0.15)] group overflow-hidden hover:scale-[1.02] transition-transform duration-500">
                         {/* Background Glow */}
                         <div className="absolute inset-0 bg-gradient-to-r from-[#ffd700]/10 to-transparent opacity-50"></div>
 
