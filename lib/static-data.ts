@@ -45,6 +45,46 @@ export interface Article {
     updatedAt: Date
 }
 
+export interface Podcast {
+    id: number
+    title: string
+    description: string
+    coverImage: string
+    duration: string
+    linkUrl: string
+    publishedAt: Date
+}
+
+export const PODCASTS: Podcast[] = [
+    {
+        id: 1,
+        title: "教育的本质是唤醒",
+        description: "探讨教育的真谛，如何激发孩子的内在动力，而非简单的知识灌输。",
+        coverImage: "https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?q=80&w=2070",
+        duration: "45:20",
+        linkUrl: "#",
+        publishedAt: new Date('2025-11-20')
+    },
+    {
+        id: 2,
+        title: "AI时代的家庭教育",
+        description: "人工智能飞速发展，家长应该如何调整教育策略，培养孩子面向未来的能力。",
+        coverImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070",
+        duration: "38:15",
+        linkUrl: "#",
+        publishedAt: new Date('2025-11-15')
+    },
+    {
+        id: 3,
+        title: "对话：从程序员到教育博主",
+        description: "分享我的个人转型经历，以及作为一名技术型家长对教育的独特思考。",
+        coverImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070",
+        duration: "52:10",
+        linkUrl: "#",
+        publishedAt: new Date('2025-11-10')
+    }
+]
+
 export const VIDEOS: Video[] = [
     {
         id: 1,

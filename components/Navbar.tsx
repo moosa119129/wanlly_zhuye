@@ -7,8 +7,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 const navItems = [
     { name: "首页", href: "/" },
-    { name: "观看视频", href: "/videos" },
-    { name: "教育文章", href: "/insights" },
+    { name: "公司介绍", href: "/company" },
+    { name: "精品内容", href: "/content" },
     { name: "AI工具", href: "/ai-lab" },
     { name: "精品课程", href: "/courses" },
 ];
