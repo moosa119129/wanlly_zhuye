@@ -20,10 +20,10 @@ export function LoginModal({ onLogin }: LoginModalProps) {
     const handleLogin = () => {
         setError("")
 
-        // Validate Name: Must be Chinese characters, 2-4 length usually, but let's say at least 2
-        const nameRegex = /^[\u4e00-\u9fa5]{2,10}$/
+        // Validate Name: Chinese or English, 2-20 chars
+        const nameRegex = /^[\u4e00-\u9fa5a-zA-Z\s]{2,20}$/
         if (!nameRegex.test(name)) {
-            setError("请输入真实中文姓名")
+            setError("请输入真实姓名")
             return
         }
 

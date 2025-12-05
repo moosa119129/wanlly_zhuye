@@ -8,7 +8,7 @@ export default function VideosPage() {
     const learningVideos = videos.filter(v => v.category === '学习力提升')
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <PageHeader
                 title="🎬 视频精选"
                 description="深度解析与碎片思考,探索知识的多种形态。"

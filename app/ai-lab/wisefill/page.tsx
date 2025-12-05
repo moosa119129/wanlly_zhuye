@@ -12,19 +12,23 @@ import { StrategyDeck } from "@/components/wisefill/StrategyDeck"
 import { RightMarquee } from "@/components/wisefill/RightMarquee"
 import { GradientChart } from "@/components/wisefill/GradientChart"
 import { ReportModal } from "@/components/wisefill/ReportModal"
+import { FilingSimulationModal } from "@/components/wisefill/FilingSimulationModal"
+import { WelcomeModal } from "@/components/wisefill/WelcomeModal"
 
 export default function WiseFillPage() {
-    const DEV_MODE = true
+    const DEV_MODE = false
     const [isLoggedIn, setIsLoggedIn] = useState(DEV_MODE)
     const [userProfile, setUserProfile] = useState<UserProfile | null>(
         DEV_MODE ? { name: "开发者", phone: "138****1234" } : null
     )
+    const [showWelcome, setShowWelcome] = useState(false)
 
     const [score, setScore] = useState<number | "">("")
     const [strategy, setStrategy] = useState<Strategy>(null)
     const [slots, setSlots] = useState<(School | null)[]>(Array(8).fill(null))
     const [aiText, setAiText] = useState("等待输入分数和策略...")
     const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+    const [isSimulationModalOpen, setIsSimulationModalOpen] = useState(false)
     const [activeDragSchool, setActiveDragSchool] = useState<School | null>(null)
 
     const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
@@ -128,8 +132,14 @@ export default function WiseFillPage() {
 
     return (
         <div className="w-full h-[calc(100vh-128px)] bg-slate-950 text-slate-100 overflow-hidden">
-            {!isLoggedIn && <LoginModal onLogin={(name, phone) => { setUserProfile({ name, phone }); setIsLoggedIn(true) }} />}
+            {!isLoggedIn && <LoginModal onLogin={(name, phone) => {
+                setUserProfile({ name, phone })
+                setIsLoggedIn(true)
+                setShowWelcome(true)
+            }} />}
+            <WelcomeModal isOpen={showWelcome} onClose={() => setShowWelcome(false)} />
             <ReportModal isOpen={isReportModalOpen} onClose={() => setIsReportModalOpen(false)} slots={slots} userProfile={userProfile} score={Number(score) || 0} />
+            <FilingSimulationModal isOpen={isSimulationModalOpen} onClose={() => setIsSimulationModalOpen(false)} />
 
             <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                 <div className="grid grid-cols-[320px_1fr_340px] h-full w-full">
@@ -142,6 +152,7 @@ export default function WiseFillPage() {
                         onRemoveSlot={handleRemoveSlot}
                         onReset={handleReset}
                         onGenerateReport={() => setIsReportModalOpen(true)}
+                        onOpenSimulation={() => setIsSimulationModalOpen(true)}
                     />
 
                     <div className="h-full flex flex-col p-4 gap-3 bg-slate-950/50 relative">

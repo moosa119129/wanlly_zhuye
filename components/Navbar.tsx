@@ -22,7 +22,7 @@ export default function Navbar() {
             <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-8">
                 <div className="mr-4 flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <img src="/mm_dad_logo.jpg" alt="Logo" className="w-8 h-8 rounded-full" />
+                        <img src="/book-logo.png" alt="Logo" className="w-8 h-8 rounded-full" />
                         <span className="hidden font-bold sm:inline-block">
                             LightYear Algorithm
                         </span>

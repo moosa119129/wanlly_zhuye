@@ -61,4 +61,13 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+
+  body {
+    background-image: url('/cyberpunk-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
 }

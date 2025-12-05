@@ -12,7 +12,7 @@ export default function CoursesPage() {
     const courses = COURSES
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <PageHeader
                 title="🎓 精选课程"
                 description="来自资深教育专家的升学规划与志愿填报指南，助你轻松应对升学挑战。"

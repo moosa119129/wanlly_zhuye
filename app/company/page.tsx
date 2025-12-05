@@ -1,112 +1,218 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowRight, Target, Brain, Shield, Zap } from "lucide-react";
 
 export default function CompanyPage() {
     return (
-        <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
-            <section className="flex-1 py-12 md:py-24 lg:py-32 relative overflow-hidden">
-                {/* Background Layers (Consistent with Homepage) */}
-                <div className="absolute inset-0 z-0">
-                    <div className="h-full w-full bg-gradient-to-br from-blue-900 via-purple-900 to-slate-900" />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-blue-500/20 to-purple-500/20" />
-                    <div className="absolute inset-0 opacity-20"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8) 1px, transparent 1px),
-                                              linear-gradient(90deg, rgba(59, 130, 246, 0.8) 1px, transparent 1px)`,
-                            backgroundSize: '60px 60px'
-                        }}
-                    />
-                </div>
-
-                <div className="container px-4 md:px-6 relative z-10 max-w-3xl mx-auto">
-                    <div className="mb-8">
-                        <Button asChild variant="ghost" className="text-blue-200 hover:text-white hover:bg-blue-800/50">
-                            <Link href="/" className="flex items-center gap-2">
-                                <ArrowLeft className="w-4 h-4" />
-                                返回首页
-                            </Link>
-                        </Button>
+        <div className="min-h-screen">
+            <div className="relative z-10">
+                {/* Header Section */}
+                <header className="container mx-auto px-6 py-20 md:py-32 text-center">
+                    <div className="flex justify-center mb-8">
+                        <img
+                            src="/company-logo.png"
+                            alt="LightYear Algorithm Logo"
+                            className="h-20 md:h-24 w-auto object-contain"
+                        />
                     </div>
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-white">
+                        关于我们
+                    </h1>
+                    <p className="text-xl md:text-2xl text-slate-400 font-light tracking-wide uppercase">
+                        About LightYear Algorithm
+                    </p>
+                </header>
 
-                    <div className="bg-slate-900/80 backdrop-blur-md border border-blue-500/30 rounded-2xl p-8 md:p-12 shadow-2xl shadow-blue-900/50">
-                        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start mb-8">
-                            <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-blue-400/50 shadow-lg shrink-0">
-                                <img
-                                    src="/avatar.png"
-                                    alt="LightYear Algorithm"
-                                    className="object-cover w-full h-full scale-110 object-[center_20%]"
-                                />
+                {/* 01. Brand Vision */}
+                <section className="container mx-auto px-6 py-16 md:py-24 border-t border-white/10">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4 text-yellow-400">
+                                <span className="text-sm font-mono tracking-widest">01.</span>
+                                <span className="text-sm font-bold tracking-widest uppercase">Brand Vision | 品牌愿景</span>
                             </div>
+                            <h2 className="text-4xl md:text-5xl font-bold leading-tight text-white">
+                                <span className="text-yellow-400">内修算力</span>，外决前程
+                            </h2>
+                            <div className="space-y-6 text-lg md:text-xl text-slate-300 leading-relaxed font-light">
+                                <p>
+                                    在信息爆炸与教育焦虑并存的时代，家庭教育往往陷入“盲卷”的困境：海量的信息是噪音，无序的努力是内耗。
+                                </p>
+                                <p>
+                                    <strong className="text-white">光年算法 (LightYear Algorithm)</strong> 是一家专注于K12阶段的新媒体教育咨询服务机构。我们拒绝贩卖焦虑，主张用数据的尺度丈量未来。我们的存在，是为了在混乱的升学信息中为您做“熵减”，在漫长的成长跑道上为您寻找“最优解”。
+                                </p>
+                                <blockquote className="border-l-4 border-yellow-400 pl-6 py-2 text-2xl font-medium text-white italic">
+                                    我们相信：教育不是博弈，是精密的规划与进化。
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/20 group">
+                            <div className="absolute inset-0 bg-blue-600/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                            <img
+                                src="/company_tech_lines.png"
+                                alt="Rising Trend Lines"
+                                className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* 02. Core Philosophy */}
+                <section className="bg-slate-900/50 py-16 md:py-24">
+                    <div className="container mx-auto px-6">
+                        <div className="mb-16">
+                            <div className="flex items-center gap-4 text-yellow-400 mb-6">
+                                <span className="text-sm font-mono tracking-widest">02.</span>
+                                <span className="text-sm font-bold tracking-widest uppercase">Core Philosophy | 核心理念</span>
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+                                50% 远见 (Light Year) + 50% 方法 (Algorithm)
+                            </h2>
+                            <p className="text-xl text-slate-300 max-w-3xl">
+                                不同于传统的单一补习或纯粹的中介咨询，光年算法坚持“双轮驱动”的教育模型：
+                            </p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Card 1: Light Year */}
+                            <div className="bg-slate-800/50 p-10 rounded-3xl border border-white/5 hover:border-blue-500/30 transition-all group">
+                                <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-500/30 transition-colors">
+                                    <Target className="w-8 h-8 text-blue-400" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-4">光年 (Light Year)</h3>
+                                <p className="text-lg text-blue-200 mb-4">—— 升学规划的广度</p>
+                                <p className="text-slate-400 leading-relaxed">
+                                    我们拥有连接“光年”的视野。从中考政策解读到长远升学路径设计，我们帮您跳出当下的分数困局，以终为始，预见孩子的长远前程。
+                                </p>
+                            </div>
+
+                            {/* Card 2: Algorithm */}
+                            <div className="bg-slate-800/50 p-10 rounded-3xl border border-white/5 hover:border-yellow-500/30 transition-all group">
+                                <div className="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-yellow-500/30 transition-colors">
+                                    <Brain className="w-8 h-8 text-yellow-400" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-4">算法 (Algorithm)</h3>
+                                <p className="text-lg text-yellow-200 mb-4">—— 学习能力的精度</p>
+                                <p className="text-slate-400 leading-relaxed">
+                                    我们通过科学的训练体系，提升孩子的核心“算力”（学习力）。通过拆解学习习惯、优化思维模型，让每一次努力都有算法加持，让每一滴汗水都算数。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 03. Service Roles */}
+                <section className="container mx-auto px-6 py-16 md:py-24">
+                    <div className="grid lg:grid-cols-2 gap-16 items-center">
+                        <div className="order-2 lg:order-1 relative h-[500px] rounded-3xl overflow-hidden shadow-2xl shadow-purple-900/20 group">
+                            <div className="absolute inset-0 bg-purple-600/10 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                            <img
+                                src="/company_brain_network.png"
+                                alt="Brain Network"
+                                className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-700"
+                            />
+                        </div>
+
+                        <div className="order-1 lg:order-2 space-y-10">
                             <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">关于光年算法</h1>
-                                <p className="text-xl text-blue-300 font-medium">LightYear Algorithm</p>
-                            </div>
-                        </div>
-
-                        <div className="prose prose-invert prose-lg max-w-none text-slate-300 space-y-6">
-                            <p>
-                                大家好，这里是光年算法（LightYear Algorithm）。
-                            </p>
-                            <p>
-                                我们致力于用数据和技术解决教育中的实际问题。创建这个平台的初衷，是希望通过可视化的数据和智能化的工具，帮助家长和学生们在升学规划的道路上少走弯路，做出更明智的决策。
-                            </p>
-                            <p>
-                                在这里，你可以找到关于中考投档的模拟演练系统，以及对教育数据的深度分析和见解。我们相信，数据不仅仅是冰冷的数字，它们背后隐藏着通往未来的线索。
-                            </p>
-                            <p>
-                                如果你有任何问题或建议，欢迎通过 Bilibili 或其他方式联系我们。让我们一起探索 AI 与教育的无限可能。
-                            </p>
-                        </div>
-
-                        {/* Contact & Social Section */}
-                        <div className="mt-12 pt-8 border-t border-blue-500/20">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                {/* Left Column: Contact & Social Text */}
-                                <div className="space-y-8">
-                                    <div>
-                                        <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                                            <span className="text-blue-400">📧</span> 联系邮箱
-                                        </h3>
-                                        <p className="text-blue-200 text-lg">wanlly@example.com</p>
-                                    </div>
-
-                                    <div className="bg-slate-800/50 p-6 rounded-xl border border-blue-500/30">
-                                        <h3 className="text-xl font-semibold text-white mb-3">全网同名搜索</h3>
-                                        <p className="text-2xl font-bold text-blue-300 mb-4">“面面的爸爸”</p>
-                                        <div className="flex flex-wrap gap-3 text-sm text-slate-300">
-                                            <span className="px-3 py-1 bg-pink-900/40 text-pink-300 rounded-full border border-pink-500/30">Bilibili</span>
-                                            <span className="px-3 py-1 bg-slate-700/60 text-white rounded-full border border-slate-500/30">抖音</span>
-                                            <span className="px-3 py-1 bg-orange-900/40 text-orange-300 rounded-full border border-orange-500/30">视频号</span>
-                                            <span className="px-3 py-1 bg-red-900/40 text-red-300 rounded-full border border-red-500/30">小红书</span>
-                                        </div>
-                                    </div>
-
-                                    <Button asChild size="lg" className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/50 transition-all">
-                                        <Link href="https://space.bilibili.com/284427802" target="_blank">
-                                            在 Bilibili 关注我
-                                        </Link>
-                                    </Button>
+                                <div className="flex items-center gap-4 text-yellow-400 mb-6">
+                                    <span className="text-sm font-mono tracking-widest">03.</span>
+                                    <span className="text-sm font-bold tracking-widest uppercase">Our Roles | 服务角色</span>
                                 </div>
+                                <h2 className="text-3xl md:text-4xl font-bold leading-tight text-white mb-6">
+                                    重构家庭教育的<br />“精密作战单元”
+                                </h2>
+                                <p className="text-lg text-slate-300">
+                                    我们将复杂的家庭教育拆解为科学的协作分工，让每一个家庭成员都能在正确的位置上发挥最大价值：
+                                </p>
+                            </div>
 
-                                {/* Right Column: QR Code */}
-                                <div className="flex flex-col items-center md:items-start">
-                                    <div className="bg-white p-3 rounded-xl shadow-lg max-w-[280px]">
-                                        <img
-                                            src="/wechat_qr.png"
-                                            alt="扫一扫加我微信"
-                                            className="w-full h-auto rounded-lg"
-                                        />
+                            <div className="space-y-8">
+                                <div className="flex gap-6">
+                                    <div className="mt-1">
+                                        <Shield className="w-6 h-6 text-yellow-400" />
                                     </div>
-                                    <p className="text-slate-400 mt-3 text-sm text-center md:text-left w-full max-w-[280px]">
-                                        扫一扫上面的二维码图案，加我为朋友
-                                    </p>
+                                    <div>
+                                        <h4 className="text-xl font-bold text-white mb-2">对于妈妈，我们是「<span className="text-yellow-400">情报过滤器</span>」</h4>
+                                        <p className="text-slate-400 leading-relaxed">
+                                            我们深知您搜集信息的辛苦。我们利用大数据为您清洗海量资讯，去伪存真，只提供高价值的决策情报，让您不再被谣言和焦虑裹挟。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-6">
+                                    <div className="mt-1">
+                                        <Target className="w-6 h-6 text-blue-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xl font-bold text-white mb-2">对于爸爸，我们是「升学战略部」</h4>
+                                        <p className="text-slate-400 leading-relaxed">
+                                            我们理解您对理性的追求。我们提供可视化的数据模型和推演逻辑，辅助您制定最适合孩子的战略决策，做孩子人生路上的定海神针。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-6">
+                                    <div className="mt-1">
+                                        <Zap className="w-6 h-6 text-purple-400" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xl font-bold text-white mb-2">对于孩子，我们是「学习进化论」</h4>
+                                        <p className="text-slate-400 leading-relaxed">
+                                            我们不是监工，而是顾问。我们传授高效的“大脑算法”，帮助孩子提升内功，在学业的丛林中实现自我进化与突围。
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+
+                {/* 04. Brand Promise & Footer */}
+                <section className="bg-gradient-to-b from-slate-900 to-black py-20 md:py-32 text-center border-t border-white/10">
+                    <div className="container mx-auto px-6">
+                        <div className="max-w-4xl mx-auto space-y-10">
+                            <div className="flex items-center justify-center gap-4 text-yellow-400 mb-4">
+                                <span className="text-sm font-mono tracking-widest">04.</span>
+                                <span className="text-sm font-bold tracking-widest uppercase">Our Promise | 品牌承诺</span>
+                            </div>
+
+                            <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                                在光年算法，我们不相信运气，<br />我们相信逻辑。
+                            </h2>
+
+                            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                                我们致力于成为那个撬动未来的支点，用理性的光芒，照亮孩子通往光年的征途。
+                            </p>
+
+                            <div className="py-10">
+                                <p className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200">
+                                    让努力有算法，让未来有方向。
+                                </p>
+                            </div>
+
+                            <div className="pt-16 border-t border-white/10 mt-16 text-left md:text-center">
+                                <div className="inline-block text-left bg-slate-800/50 p-8 rounded-2xl border border-white/5">
+                                    <h3 className="text-xl font-bold text-white mb-4 tracking-wider">LIGHTYEAR ALGORITHM</h3>
+                                    <ul className="space-y-3 text-slate-300">
+                                        <li className="flex flex-col md:flex-row md:items-center gap-2">
+                                            <span className="text-slate-500 uppercase text-sm font-bold w-24">中文名</span>
+                                            <span className="font-medium">光年算法</span>
+                                        </li>
+                                        <li className="flex flex-col md:flex-row md:items-center gap-2">
+                                            <span className="text-slate-500 uppercase text-sm font-bold w-24">定位</span>
+                                            <span className="font-medium">家庭教育的数据外脑与决策罗盘</span>
+                                        </li>
+                                        <li className="flex flex-col md:flex-row md:items-center gap-2">
+                                            <span className="text-slate-500 uppercase text-sm font-bold w-24">主营</span>
+                                            <span className="font-medium">升学规划咨询 / 青少年学习力提升训练</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }

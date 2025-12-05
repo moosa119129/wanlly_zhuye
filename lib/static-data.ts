@@ -137,14 +137,7 @@ export const VIDEOS: Video[] = [
 ]
 
 export const APP_DEMOS: AppDemo[] = [
-    {
-        id: 1,
-        title: "中考投档模拟系统",
-        description: "基于投档逻辑的模拟系统,直观展示投档过程。",
-        status: "Live",
-        linkUrl: "/ai-lab/toudang",
-        coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-    },
+
     {
         id: 2,
         title: "WiseFill 中考志愿智能填报",

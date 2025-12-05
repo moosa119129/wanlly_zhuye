@@ -19,21 +19,6 @@ export function PageHeader({
 }: PageHeaderProps) {
     return (
         <div className={cn("relative w-full overflow-hidden", className)}>
-            {/* Professional Education Tech Gradient */}
-            <div className="absolute inset-0 z-0">
-                <div className="h-full w-full bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900" />
-                {/* Subtle animated overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-500/10 to-transparent opacity-50" />
-                {/* Clean grid pattern */}
-                <div className="absolute inset-0 opacity-[0.03]"
-                    style={{
-                        backgroundImage: `linear-gradient(#fff 1px, transparent 1px),
-                                          linear-gradient(90deg, #fff 1px, transparent 1px)`,
-                        backgroundSize: '40px 40px'
-                    }}
-                />
-            </div>
-
             {/* Content */}
             <div className={cn(
                 "container relative z-10 flex flex-col justify-center py-12 md:py-20",

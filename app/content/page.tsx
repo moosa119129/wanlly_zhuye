@@ -10,12 +10,13 @@ import { zhCN } from "date-fns/locale";
 
 export default function ContentPage() {
     // Get top 3 items for each category
+    // Force rebuild
     const featuredVideos = VIDEOS.slice(0, 3);
     const featuredArticles = ARTICLES.filter(a => a.published).slice(0, 3);
     const featuredPodcasts = PODCASTS.slice(0, 3);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <PageHeader
                 title="💎 精品内容"
                 description="汇聚深度解析视频、专业教育文章与前沿播客，为您提供全方位的教育视野。"
@@ -84,7 +85,7 @@ export default function ContentPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {featuredArticles.map((article) => (
-                            <Link key={article.id} href={`/insights/${article.slug}`} className="group">
+                            <Link key={article.id} href={`/insights/${article.slug}`} target="_blank" className="group">
                                 <Card className="h-full hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col">
                                     {article.coverImage && (
                                         <div className="aspect-[2/1] relative overflow-hidden">

@@ -7,7 +7,7 @@ export default function AILabPage() {
     const demos = APP_DEMOS
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <PageHeader
                 title="🧪 AI 与工具实验室"
                 description="这里展示了我正在开发的 AI 轻应用和实验项目。"

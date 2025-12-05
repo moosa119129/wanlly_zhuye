@@ -10,7 +10,7 @@ export default function InsightsPage() {
     const articles = ARTICLES.filter(a => a.published)
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col">
             <PageHeader
                 title="💡 观点与思考"
                 description="深度文章与独立见解,记录成长与思考的轨迹。"

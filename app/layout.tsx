@@ -20,6 +20,10 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 // ... imports
 
+import GlobalBackground from "@/components/GlobalBackground";
+
+// ... imports
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -29,15 +33,16 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body
                 className={cn(
-                    "min-h-screen bg-background font-sans antialiased flex flex-col",
+                    "min-h-screen font-sans antialiased flex flex-col bg-slate-950 text-slate-100 selection:bg-yellow-400 selection:text-slate-900",
                     inter.variable
                 )}
                 suppressHydrationWarning
             >
+                <GlobalBackground />
                 <ThemeProvider
                     attribute="class"
-                    defaultTheme="system"
-                    enableSystem
+                    defaultTheme="dark"
+                    enableSystem={false}
                     disableTransitionOnChange
                 >
                     <Navbar />

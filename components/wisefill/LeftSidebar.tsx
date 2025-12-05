@@ -15,6 +15,7 @@ interface LeftSidebarProps {
     onRemoveSlot: (index: number) => void
     onReset: () => void
     onGenerateReport: () => void
+    onOpenSimulation: () => void
 }
 
 export function LeftSidebar({
@@ -25,7 +26,8 @@ export function LeftSidebar({
     slots,
     onRemoveSlot,
     onReset,
-    onGenerateReport
+    onGenerateReport,
+    onOpenSimulation
 }: LeftSidebarProps) {
     return (
         <div className="h-full flex flex-col bg-slate-900/50 backdrop-blur-md border-r border-slate-800/50">
@@ -95,13 +97,19 @@ export function LeftSidebar({
             </div>
 
             {/* Generate Report Button - 固定在底部 */}
-            <div className="shrink-0 p-2 border-t border-slate-800/50 bg-slate-900/30">
+            <div className="shrink-0 p-2 border-t border-slate-800/50 bg-slate-900/30 space-y-2">
                 <Button
                     className="w-full bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 h-10 text-xs font-bold"
                     onClick={onGenerateReport}
                     disabled={!score || slots.every(s => s === null)}
                 >
                     📄 生成方案书
+                </Button>
+                <Button
+                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 h-10 text-xs font-bold"
+                    onClick={onOpenSimulation}
+                >
+                    🎯 投档模拟系统
                 </Button>
             </div>
         </div>
