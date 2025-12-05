@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Target, Brain, Shield, Zap } from "lucide-react";
+import GrowthModel from "@/components/GrowthModel";
 
 export default function CompanyPage() {
     return (
@@ -100,6 +101,11 @@ export default function CompanyPage() {
                             </div>
                         </div>
                     </div>
+                </section>
+
+                {/* Growth Model Visualization */}
+                <section className="container mx-auto px-6 py-16 md:py-24">
+                    <GrowthModel />
                 </section>
 
                 {/* 03. Service Roles */}
