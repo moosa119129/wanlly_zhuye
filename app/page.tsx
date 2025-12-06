@@ -34,7 +34,7 @@ export default function Home() {
                                     <Link href="/about">联系我</Link>
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="bg-blue-900/40 border-blue-400 text-white hover:bg-blue-800 hover:text-white transition-all shadow-md">
-                                    <Link href="/videos">观看视频</Link>
+                                    <Link href="/content">精品内容</Link>
                                 </Button>
                             </div>
                         </div>
