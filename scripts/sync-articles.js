@@ -223,7 +223,23 @@ function cleanContent(content) {
 }
 
 /**
+ * 检查是否到了发布日期
+ */
+function isPublishDateReached(publishDate) {
+    if (!publishDate) return true; // 没有设置发布日期，立即发布
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 只比较日期，忽略时间
+
+    const targetDate = new Date(publishDate);
+    targetDate.setHours(0, 0, 0, 0);
+
+    return targetDate <= today;
+}
+
+/**
  * 解析单篇文章
+ * @returns {object|null|'scheduled'} 文章对象、null（未发布）或 'scheduled'（计划发布）
  */
 async function parseArticle(filePath, vaultPath, imagesDir, id) {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -232,6 +248,14 @@ async function parseArticle(filePath, vaultPath, imagesDir, id) {
     // 检查发布状态
     if (frontmatter.status !== CONFIG.publishedStatus) {
         return null;
+    }
+
+    // 检查是否到了计划发布日期
+    const publishDate = frontmatter['publish-date'];
+    if (!isPublishDateReached(publishDate)) {
+        const fileName = path.basename(filePath, '.md');
+        console.log(`⏰ 计划发布: ${fileName} (${publishDate})`);
+        return 'scheduled';
     }
 
     const fileName = path.basename(filePath, '.md');
@@ -313,18 +337,24 @@ async function main() {
     // 解析所有文章
     const articles = [];
     let id = 1;
+    let scheduledCount = 0;
 
     for (const file of files) {
         const filePath = path.join(articlesDir, file);
-        const article = await parseArticle(filePath, vaultPath, imagesDir, id);
+        const result = await parseArticle(filePath, vaultPath, imagesDir, id);
 
-        if (article) {
-            articles.push(article);
+        if (result === 'scheduled') {
+            scheduledCount++;
+        } else if (result) {
+            articles.push(result);
             id++;
         }
     }
 
     console.log(`\n✅ 已处理 ${articles.length} 篇已发布文章`);
+    if (scheduledCount > 0) {
+        console.log(`⏰ ${scheduledCount} 篇文章等待计划发布`);
+    }
 
     // 按发布日期排序（最新的在前）
     articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
@@ -337,7 +367,8 @@ async function main() {
     // 输出统计
     console.log('\n📊 统计:');
     console.log(`   - 已发布文章: ${articles.length}`);
-    console.log(`   - 跳过的文章: ${files.length - articles.length}`);
+    console.log(`   - 计划发布: ${scheduledCount}`);
+    console.log(`   - 草稿/跳过: ${files.length - articles.length - scheduledCount}`);
 }
 
 main().catch(console.error);
