@@ -132,12 +132,13 @@ export default function ContentPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {featuredPodcasts.map((podcast) => (
-                            <div key={podcast.id} className="group cursor-pointer">
+                            <Link key={podcast.id} href={`/podcasts/${podcast.id}`} className="group">
                                 <Card className="h-full hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
                                     <div className="aspect-square relative overflow-hidden">
                                         <img
                                             src={podcast.coverImage}
                                             alt={podcast.title}
+                                            referrerPolicy="no-referrer"
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                         />
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -163,7 +164,7 @@ export default function ContentPage() {
                                         </div>
                                     </CardHeader>
                                 </Card>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </section>

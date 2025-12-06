@@ -52,36 +52,40 @@ export interface Podcast {
     coverImage: string
     duration: string
     linkUrl: string
+    episodeId: string  // 小宇宙单集ID，用于嵌入播放器
     publishedAt: Date
 }
 
 export const PODCASTS: Podcast[] = [
     {
         id: 1,
-        title: "教育的本质是唤醒",
-        description: "探讨教育的真谛，如何激发孩子的内在动力，而非简单的知识灌输。",
-        coverImage: "https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?q=80&w=2070",
-        duration: "45:20",
-        linkUrl: "#",
-        publishedAt: new Date('2025-11-20')
+        title: "数字时代亲子关系，孩子和家长谁才是被'伤害'的？",
+        description: "探讨数字时代下的亲子关系，21天行动计划帮助家长建立高质量陪伴习惯。",
+        coverImage: "https://bts-image.xyzcdn.net/aHR0cHM6Ly9pbWFnZS54eXpjZG4ubmV0L0ZwdzRMZUlDeDFKMUdEdXhteGVhTWZ4UGdWUXQucG5n.png",
+        duration: "44:00",
+        linkUrl: "https://www.xiaoyuzhoufm.com/episode/67416b058d1233fb0d5dd71b",
+        episodeId: "67416b058d1233fb0d5dd71b",
+        publishedAt: new Date('2024-11-23')
     },
     {
         id: 2,
-        title: "AI时代的家庭教育",
-        description: "人工智能飞速发展，家长应该如何调整教育策略，培养孩子面向未来的能力。",
-        coverImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070",
-        duration: "38:15",
-        linkUrl: "#",
-        publishedAt: new Date('2025-11-15')
+        title: "高质量陪伴，成长过程中坚实基础",
+        description: "高质量陪伴的四维模型：情感连接、互动交流、日常参与、支持引导。5个实践关键字助你成为更好的家长。",
+        coverImage: "https://bts-image.xyzcdn.net/aHR0cHM6Ly9pbWFnZS54eXpjZG4ubmV0L0ZwdzRMZUlDeDFKMUdEdXhteGVhTWZ4UGdWUXQucG5n.png",
+        duration: "35:00",
+        linkUrl: "https://www.xiaoyuzhoufm.com/episode/672c6d2182eb19451ddb0572",
+        episodeId: "672c6d2182eb19451ddb0572",
+        publishedAt: new Date('2024-11-07')
     },
     {
         id: 3,
-        title: "对话：从程序员到教育博主",
-        description: "分享我的个人转型经历，以及作为一名技术型家长对教育的独特思考。",
-        coverImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070",
-        duration: "52:10",
-        linkUrl: "#",
-        publishedAt: new Date('2025-11-10')
+        title: "即将抵达：开篇介绍，家庭教育中如何为孩子规划升学路径？",
+        description: "面爸的第一条播客，分享视频里无法分享的内容，致力于亲子陪伴教育，愿每个孩子都有光明的未来！",
+        coverImage: "https://bts-image.xyzcdn.net/aHR0cHM6Ly9pbWFnZS54eXpjZG4ubmV0L0ZwdzRMZUlDeDFKMUdEdXhteGVhTWZ4UGdWUXQucG5n.png",
+        duration: "13:00",
+        linkUrl: "https://www.xiaoyuzhoufm.com/episode/668272aa077b88831b74601c",
+        episodeId: "668272aa077b88831b74601c",
+        publishedAt: new Date('2024-07-01')
     }
 ]
 
