@@ -169,11 +169,13 @@ async function processImages(content, slug, vaultPath, imagesDir) {
     const obsidianMatches = [...content.matchAll(obsidianImageRegex)];
     for (const match of obsidianMatches) {
         const imageName = match[1];
-        // 查找图片文件（可能在 attachments 子目录或其他位置）
+        // 查找图片文件（可能在 assets、attachments 子目录或其他位置）
         const possiblePaths = [
+            path.join(vaultPath, CONFIG.articlesPath, 'assets', imageName),
             path.join(vaultPath, CONFIG.articlesPath, 'attachments', imageName),
             path.join(vaultPath, CONFIG.articlesPath, imageName),
             path.join(vaultPath, 'attachments', imageName),
+            path.join(vaultPath, 'assets', imageName),
         ];
 
         let foundPath = null;
