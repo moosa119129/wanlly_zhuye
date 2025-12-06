@@ -88,11 +88,11 @@ export default function ContentPage() {
                             <Link key={article.id} href={`/insights/${article.slug}`} target="_blank" className="group">
                                 <Card className="h-full hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden flex flex-col">
                                     {article.coverImage && (
-                                        <div className="aspect-[2/1] relative overflow-hidden">
+                                        <div className="aspect-[2.35/1] relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
                                             <img
                                                 src={article.coverImage}
                                                 alt={article.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                                             />
                                             <div className="absolute top-2 right-2">
                                                 <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
