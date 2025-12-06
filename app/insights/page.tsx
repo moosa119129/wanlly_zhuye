@@ -22,12 +22,12 @@ export default function InsightsPage() {
                             <Link key={article.id} href={`/insights/${article.slug}`} className="group">
                                 <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer overflow-hidden flex flex-col">
                                     {article.coverImage && (
-                                        <div className="aspect-video bg-muted relative overflow-hidden">
+                                        <div className="aspect-[2.35/1] bg-gradient-to-br from-slate-800 to-slate-900 relative overflow-hidden">
                                             <img
                                                 src={article.coverImage}
                                                 alt={article.title}
                                                 referrerPolicy="no-referrer"
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                             />
                                             <div className="absolute top-2 right-2">
                                                 <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">

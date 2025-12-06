@@ -32,11 +32,11 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             />
             <div className="container max-w-4xl py-12 px-4 md:px-6">
                 {article.coverImage && (
-                    <div className="aspect-video relative rounded-lg overflow-hidden mb-8">
+                    <div className="aspect-[2.35/1] relative rounded-lg overflow-hidden mb-8 bg-gradient-to-br from-slate-800 to-slate-900">
                         <img
                             src={article.coverImage}
                             alt={article.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                         />
                     </div>
                 )}
