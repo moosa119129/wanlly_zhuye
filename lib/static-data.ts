@@ -93,7 +93,7 @@ export const VIDEOS: Video[] = [
     // 置顶视频
     { id: 1, title: "中考改革，火力更集中，拿掉小四门，减负对哪类孩子最不利？何时推广全国？", bvid: "BV1mm4y1u7oq", type: "long", category: "中考政策", coverImage: "https://i1.hdslb.com/bfs/archive/77306d553a64088b7725b1657fa4bd5f0230251d.jpg" },
     { id: 2, title: "一首新写的旧歌，它早该写了，轻易不敢翻唱的一首……cover:李宗盛", bvid: "BV1SvZmYqE7B", type: "long", category: "其他", coverImage: "https://i1.hdslb.com/bfs/archive/96e92d25a6d632aa49b56d68172c81c12809ed28.jpg" },
-    { id: 3, title: "今年成都中考总分710分，你知道是怎么构成的吗？详细分析", bvid: "BV1yV4y1r74a", type: "long", category: "中考政策", coverImage: "https://i1.hdslb.com/bfs/archive/6fe7c35d250c36203008248efc60e79f0643d7fc.jpg" },
+    { id: 3, title: "名校竟然断档？最详细的成都中考招生录取数据分析，来看黑马和冷门", bvid: "BV17g4y1w7Z1", type: "long", category: "中考政策", coverImage: "https://i1.hdslb.com/bfs/archive/b046dd5f822896124e1953d6f291af6361b6dac1.jpg" },
     // 其他视频
     { id: 4, title: "10天3600公里，酷暑下的晋豫环线亲子自驾游，详细路书已出", bvid: "BV1EitvzXERP", type: "long", category: "亲子旅行", coverImage: "https://i1.hdslb.com/bfs/archive/6e8fe5b328696b94e4ec8ad6d63f570843c87e8c.jpg" },
     { id: 5, title: "2025北京中考改革，背后深意？如何影响深远？", bvid: "BV152XBY6EV1", type: "long", category: "中考政策", coverImage: "https://i1.hdslb.com/bfs/archive/5987d1b5b797a22e0a548fed1c78816ad22d91aa.jpg" },
@@ -125,7 +125,7 @@ export const VIDEOS: Video[] = [
     { id: 31, title: "你要择校吗？由中考和小升初思考，如果择校，你失去的是……", bvid: "BV13P41167PV", type: "long", category: "升学规划", coverImage: "https://i1.hdslb.com/bfs/archive/1a37341ab2e2bd33b631ea802a6fb4369afcb935.jpg" },
     { id: 32, title: "带娃7000公里怎么走下来的？你能明显看到孩子的变化，暑假亲子旅行的意义", bvid: "BV1YW4y1d7cJ", type: "long", category: "亲子旅行", coverImage: "https://i1.hdslb.com/bfs/archive/b7bde90f682701c6aff2d97efb6c61fe8f1e00be.jpg" },
     { id: 33, title: "高考志愿，应该从什么时候开始关注？很可能你已经晚了", bvid: "BV14V4y1b7cM", type: "long", category: "志愿填报", coverImage: "https://i1.hdslb.com/bfs/archive/ff2a7a300e017e7a1e03fea324fcc53576ca65e4.jpg" },
-    { id: 34, title: "名校竟然断档？最详细的成都中考招生录取数据分析，来看黑马和冷门", bvid: "BV17g4y1w7Z1", type: "long", category: "中考政策", coverImage: "https://i1.hdslb.com/bfs/archive/b046dd5f822896124e1953d6f291af6361b6dac1.jpg" },
+
     { id: 35, title: "别纠结了，保姆级中考志愿填报教程，照做就行，成绩发布当天行动指南", bvid: "BV17X4y1p7nT", type: "long", category: "志愿填报", coverImage: "https://i1.hdslb.com/bfs/archive/2d76286d6add917a93e310f850b5aa84521af2cd.jpg" },
     { id: 36, title: "中考必看，填报志愿不纠结，线差位次法轻松搞定高中选校攻略，分数不浪费", bvid: "BV1kN41167mT", type: "long", category: "志愿填报", coverImage: "https://i1.hdslb.com/bfs/archive/3c57acf013e761eccc39f389ce17b38faa004468.jpg" },
     { id: 37, title: "不知怎么选高中？中考志愿指南，成都高中5大梯队，你够到第几层？", bvid: "BV19s4y1y7TY", type: "long", category: "志愿填报", coverImage: "https://i1.hdslb.com/bfs/archive/83498689db1a029f371481ec4ff51a9ab3dfe6d0.jpg" },
