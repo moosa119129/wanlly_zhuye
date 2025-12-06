@@ -169,15 +169,22 @@ export default function ContentPage() {
 
                         {/* 敬请期待占位卡片 */}
                         <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden border-dashed">
-                            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-orange-500/5 to-amber-500/5 flex items-center justify-center">
-                                <div className="text-center px-6">
+                            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-blue-500/10 to-amber-500/10">
+                                {/* 背景logo - 半透明模糊 */}
+                                <img
+                                    src="/mm_dad_logo.jpg"
+                                    alt="即将到来"
+                                    className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm"
+                                />
+                                {/* 前景内容 */}
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-transparent via-background/60 to-background/80">
                                     <img
                                         src="/mm_dad_logo.jpg"
                                         alt="面面的爸爸"
-                                        className="w-24 h-24 mx-auto mb-4 rounded-full object-cover ring-2 ring-orange-500/20"
+                                        className="w-32 h-32 rounded-full object-cover ring-4 ring-blue-500/30 mb-4 shadow-xl"
                                     />
-                                    <p className="text-lg font-semibold text-muted-foreground">敬请期待</p>
-                                    <p className="text-xs text-muted-foreground/60 mt-1">更多精彩内容</p>
+                                    <p className="text-xl font-bold text-foreground mb-1">敬请期待</p>
+                                    <p className="text-sm text-muted-foreground">更多精彩节目</p>
                                 </div>
                             </div>
                             <CardHeader>
