@@ -130,7 +130,7 @@ export default function ContentPage() {
                         </div>
                         {/* No "View All" for now as it's a new section */}
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {featuredPodcasts.map((podcast) => (
                             <Link key={podcast.id} href={`/podcasts/${podcast.id}`} className="group">
                                 <Card className="h-full hover:shadow-lg transition-all duration-300 border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden">
@@ -166,6 +166,29 @@ export default function ContentPage() {
                                 </Card>
                             </Link>
                         ))}
+
+                        {/* 敬请期待占位卡片 */}
+                        <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden border-dashed">
+                            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-orange-500/5 to-amber-500/5 flex items-center justify-center">
+                                <div className="text-center px-6">
+                                    <img
+                                        src="/mm_dad_logo.jpg"
+                                        alt="面面的爸爸"
+                                        className="w-24 h-24 mx-auto mb-4 rounded-full object-cover ring-2 ring-orange-500/20"
+                                    />
+                                    <p className="text-lg font-semibold text-muted-foreground">敬请期待</p>
+                                    <p className="text-xs text-muted-foreground/60 mt-1">更多精彩内容</p>
+                                </div>
+                            </div>
+                            <CardHeader>
+                                <CardTitle className="line-clamp-1 text-lg text-muted-foreground">
+                                    新节目筹备中
+                                </CardTitle>
+                                <CardDescription className="line-clamp-2 mt-2">
+                                    我们正在策划更多优质内容，敬请关注小宇宙「即将抵达」播客频道。
+                                </CardDescription>
+                            </CardHeader>
+                        </Card>
                     </div>
                 </section>
 
