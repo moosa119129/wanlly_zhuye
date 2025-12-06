@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光年算法·全息成长模型 (最终逻辑修正版)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a192f;
+            --card-bg: rgba(17, 34, 64, 0.9);
+            --card-border: #233554;
+            --primary-cyan: #64ffda;
+            --highlight-yellow: #FFD700;
+            --text-white: #e6f1ff;
+            --text-gray: #8892b0;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-white);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 主画板 */
+        .diagram-board {
+            position: relative;
+            width: 1200px;
+            height: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            /* 拉伸以充满高度 */
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        /* SVG 层 (置于底层) */
+        .svg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 通用列布局 */
+        .column {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header {
+            color: var(--primary-cyan);
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--primary-cyan);
+            display: inline-block;
+            padding-bottom: 5px;
+            align-self: center;
+        }
+
+        /* === 左侧：内因 (倒金字塔) === */
+        .left-col {
+            width: 350px;
+        }
+
+        .pyramid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 12px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--highlight-yellow);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .c-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .c-sub {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-top: 2px;
+        }
+
+        .icon {
+            color: var(--highlight-yellow);
+            margin-right: 8px;
+        }
+
+        /* 倒金字塔宽度控制 */
+        .l1 {
+            width: 100%;
+            height: 60px;
+        }
+
+        /* 道 */
+        .l2 {
+            width: 90%;
+            height: 60px;
+            border-left: 3px solid var(--highlight-yellow);
+        }
+
+        /* 法 */
+        .l3 {
+            width: 80%;
+            height: 60px;
+            border-left: 3px solid var(--highlight-yellow);
+        }
+
+        /* 术 */
+        .l4 {
+            width: 70%;
+            height: 50px;
+        }
+
+        /* 器 */
+        .l5 {
+            width: 60%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 2px solid var(--highlight-yellow);
+        }
+
+        /* 基石 */
+
+        /* 内部向上小箭头 */
+        .up-arrow {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 10px;
+            margin: -2px 0;
+        }
+
+        /* === 中间：外因 === */
+        .center-col {
+            width: 300px;
+            padding-top: 40px;
+        }
+
+        .env-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .env-card {
+            width: 200px;
+            padding: 15px;
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            color: var(--primary-cyan);
+            font-weight: bold;
+        }
+
+        /* 关系解码器 - 悬浮在环境右侧 */
+        .decoder-box {
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 140px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px dashed var(--highlight-yellow);
+            border-radius: 8px;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .decoder-title {
+            font-size: 12px;
+            color: var(--highlight-yellow);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .tag {
+            display: block;
+            font-size: 10px;
+            background: var(--highlight-yellow);
+            color: black;
+            border-radius: 4px;
+            margin: 2px 0;
+            padding: 2px;
+        }
+
+        /* === 右侧：结果 (竖长条) === */
+        .right-col {
+            width: 180px;
+            align-items: flex-end;
+            padding-right: 20px;
+        }
+
+        .result-bar {
+            width: 100%;
+            height: 70%;
+            /* 占据大部分高度 */
+            background: linear-gradient(180deg, rgba(10, 25, 47, 0.5) 0%, rgba(100, 255, 218, 0.1) 100%);
+            border: 2px solid var(--primary-cyan);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(100, 255, 218, 0.1);
+            position: relative;
+        }
+
+        /* 结果容器的发光效果 */
+        .result-bar::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20%;
+            bottom: 20%;
+            width: 4px;
+            background: var(--highlight-yellow);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--highlight-yellow);
+        }
+
+        .r-icon {
+            font-size: 40px;
+            color: var(--highlight-yellow);
+            margin-bottom: 30px;
+        }
+
+        .r-text {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            letter-spacing: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="diagram-board">
+
+        <svg class="svg-layer">
+            <defs>
+                <marker id="arrow-yellow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#FFD700" />
+                </marker>
+
+                <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.05" />
+                    <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.8" />
+                </linearGradient>
+            </defs>
+
+            <path d="M 640 350 C 500 350, 450 340, 315 340" fill="none" stroke="#FFD700" stroke-width="2"
+                stroke-dasharray="6,4" marker-end="url(#arrow-yellow)" />
+
+            <path d="M 350 200 C 600 200, 800 300, 960 350" fill="none" stroke="url(#flowGrad)" stroke-width="4" />
+
+            <path d="M 650 450 C 800 450, 850 400, 960 380" fill="none" stroke="url(#flowGrad)" stroke-width="4" />
+
+            <polygon points="960,330 960,400 1000,365" fill="#FFD700" opacity="0.9" />
+
+            <line x1="360" y1="280" x2="500" y2="280" stroke="#64ffda" stroke-width="1" stroke-dasharray="2,2"
+                opacity="0.3" />
+
+        </svg>
+
+        <div class="column left-col">
+            <div class="header">内因 · 个体</div>
+            <div class="pyramid-wrapper">
+                <div class="card l1">
+                    <div class="c-title"><i class="fas fa-star icon"></i>道 · 愿景</div>
+                    <div class="c-sub">目标 / 使命</div>
+                </div>
+                <div class="up-arrow">▲</div>
+
+                <div class="card l2">
+                    <div class="c-title"><i class="fas fa-route icon"></i>法 · 升学规划 & NLP</div>
+                    <div class="c-sub">Admissions Strategy</div>
+                </div>
+                <div class="up-arrow">▲</div>
+
+                <div class="card l3">
+                    <div class="c-title"><i class="fas fa-cogs icon"></i>术 · 核心能力</div>
+                    <div class="c-sub">动力 / 执行力 / <strong>注意力</strong></div>
+                </div>
+                <div class="up-arrow">▲</div>
+
+                <div class="card l4">
+                    <div class="c-title"><i class="fas fa-tools icon"></i>器 · 工具</div>
+                    <div class="c-sub">手册 / 系统</div>
+                </div>
+                <div class="up-arrow">▲</div>
+
+                <div class="card l5">
+                    <div class="c-title"><i class="fas fa-microchip icon"></i>基石 · 5维算力</div>
+                    <div class="c-sub">底层认知机能</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column center-col">
+            <div class="header">外因 · 环境</div>
+            <div class="env-stack">
+                <div class="env-card"><i class="fas fa-school"></i> 学校环境</div>
+                <div class="env-card"><i class="fas fa-home"></i> 家庭环境</div>
+                <div class="env-card"><i class="fas fa-users"></i> 社会场域</div>
+            </div>
+
+            <div class="decoder-box">
+                <div class="decoder-title"><i class="fas fa-search"></i> 关系解码器</div>
+                <span class="tag">DISC (外显)</span>
+                <span class="tag">MBTI (内化)</span>
+            </div>
+        </div>
+
+        <div class="column right-col">
+            <div class="result-bar">
+                <div class="r-icon">🎯</div>
+                <div class="r-text">学业与人生发展</div>
+                <div style="margin-top:20px; color:#64ffda; font-size:12px;">RESULT</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

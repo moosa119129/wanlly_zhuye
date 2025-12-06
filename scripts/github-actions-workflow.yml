@@ -1,0 +1,52 @@
+name: Sync Articles to Website
+
+on:
+  push:
+    paths:
+      - '20 Areas/Education/公众号文章库/**'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout vault repo
+        uses: actions/checkout@v4
+        with:
+          path: vault
+
+      - name: Checkout website repo
+        uses: actions/checkout@v4
+        with:
+          repository: moosa119129/wanlly_zhuye
+          token: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          path: website
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd website
+          npm ci
+
+      - name: Run sync script
+        run: |
+          cd website
+          node scripts/sync-articles.js ../vault
+
+      - name: Commit and push changes
+        run: |
+          cd website
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🔄 Sync articles from Obsidian [automated]"
+            git push
+          fi

@@ -46,10 +46,28 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                         <time>{new Date(article.publishedAt).toLocaleDateString('zh-CN')}</time>
                     )}
                 </div>
+                {/* 文章头图 */}
+                <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+                    <img
+                        src="/article-images/header.png"
+                        alt="文章头图"
+                        className="w-full h-auto object-cover"
+                    />
+                </div>
+
                 <div
                     className="prose prose-lg dark:prose-invert max-w-none"
                     dangerouslySetInnerHTML={{ __html: article.content }}
                 />
+
+                {/* 文章尾图 */}
+                <div className="mt-12 rounded-lg overflow-hidden shadow-lg">
+                    <img
+                        src="/article-images/footer.png"
+                        alt="文章尾图"
+                        className="w-full h-auto object-cover"
+                    />
+                </div>
             </div>
         </div>
     );
