@@ -53,18 +53,30 @@ export default async function PodcastDetailPage({ params }: PodcastPageProps) {
                     </span>
                 </div>
 
-                {/* 小宇宙嵌入播放器 */}
-                <div className="aspect-video w-full rounded-xl overflow-hidden bg-gradient-to-br from-orange-900/20 to-slate-900 mb-8">
-                    <iframe
-                        src={`https://player.xiaoyuzhoufm.com/episode/${podcast.episodeId}?theme=dark`}
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
-                        allow="autoplay; clipboard-write; encrypted-media"
-                        allowFullScreen
-                        className="w-full h-full"
+                {/* 播客封面和播放入口 */}
+                <a
+                    href={podcast.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block aspect-video w-full rounded-xl overflow-hidden bg-gradient-to-br from-orange-900/20 to-slate-900 mb-8 relative group"
+                >
+                    <img
+                        src={podcast.coverImage}
+                        alt={podcast.title}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                     />
-                </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                            <svg className="w-10 h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                        <p className="text-sm opacity-80">点击在小宇宙中收听</p>
+                    </div>
+                </a>
 
                 {/* 在小宇宙中打开 */}
                 <div className="flex justify-center">
