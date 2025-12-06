@@ -139,11 +139,32 @@ async function processImages(content, slug, vaultPath, imagesDir) {
         const localPath = `/articles/images/${fileName}`;
         const destPath = path.join(imagesDir, fileName);
 
-        imageMap.set(url, { localPath, destPath, alt });
+        // 检查是否是本地相对路径（不是 http/https 开头）
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            // 本地文件：解码 URL 并构建完整路径
+            const decodedUrl = decodeURIComponent(url);
+            const localImagePath = path.join(vaultPath, CONFIG.articlesPath, decodedUrl);
+
+            if (fs.existsSync(localImagePath)) {
+                if (!fs.existsSync(destPath)) {
+                    console.log(`  📋 复制本地图片: ${fileName}`);
+                    fs.copyFileSync(localImagePath, destPath);
+                } else {
+                    console.log(`  ⏭️  图片已存在: ${fileName}`);
+                }
+                imageMap.set(url, { localPath, destPath, alt, isLocal: true });
+            } else {
+                console.log(`  ⚠️  本地图片未找到: ${decodedUrl}`);
+            }
+            continue;
+        }
+
+        // 网络图片：添加到下载队列
+        imageMap.set(url, { localPath, destPath, alt, isLocal: false });
         imagesToDownload.push({ url, destPath, fileName });
     }
 
-    // 下载图片
+    // 下载网络图片
     for (const { url, destPath, fileName } of imagesToDownload) {
         if (fs.existsSync(destPath)) {
             console.log(`  ⏭️  图片已存在: ${fileName}`);
