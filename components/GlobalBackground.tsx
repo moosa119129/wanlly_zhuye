@@ -13,7 +13,7 @@ export default function GlobalBackground() {
             {/* Background Image */}
             <div className="absolute inset-0 overflow-hidden">
                 <img
-                    src="/封面底图_4x.png"
+                    src="/bg-robot.png"
                     alt="Background"
                     className={cn(
                         "w-full h-full object-cover transition-all duration-700 ease-in-out",
