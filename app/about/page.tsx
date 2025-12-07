@@ -6,17 +6,15 @@ export default function AboutPage() {
     return (
         <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
             <section className="flex-1 py-12 md:py-24 lg:py-32 relative overflow-hidden">
-                {/* Background Layers (Consistent with Homepage) */}
+                {/* Background Image */}
                 <div className="absolute inset-0 z-0">
-                    <div className="h-full w-full bg-gradient-to-br from-blue-900 via-purple-900 to-slate-900" />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 via-blue-500/20 to-purple-500/20" />
-                    <div className="absolute inset-0 opacity-20"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8) 1px, transparent 1px),
-                                              linear-gradient(90deg, rgba(59, 130, 246, 0.8) 1px, transparent 1px)`,
-                            backgroundSize: '60px 60px'
-                        }}
+                    <img
+                        src="/about-bg.png"
+                        alt="Background"
+                        className="w-full h-full object-cover"
                     />
+                    {/* Dark overlay for readability */}
+                    <div className="absolute inset-0 bg-slate-950/70" />
                 </div>
 
                 <div className="container px-4 md:px-6 relative z-10 max-w-3xl mx-auto">

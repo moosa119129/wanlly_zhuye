@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title: "Personal Brand Website",
     description: "Knowledge Blogger Personal Website",
     icons: {
-        icon: '/mm_dad_logo.jpg',
+        icon: '/logo.png',
     },
 };
 

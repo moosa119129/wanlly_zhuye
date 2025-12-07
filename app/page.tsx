@@ -9,11 +9,11 @@ export default function Home() {
                 <div className="container max-w-screen-2xl px-4 md:px-8 relative z-10">
                     <div className="flex flex-col items-start text-left max-w-2xl mt-32 lg:mt-60">
                         {/* Logo above title */}
-                        <div className="mb-10">
+                        <div className="mb-10 -ml-1">
                             <img
-                                src="/lightyear-logo-large.png"
+                                src="/logo-horizontal.png"
                                 alt="LightYear Algorithm Logo"
-                                className="h-12 md:h-16 lg:h-20 w-auto object-contain"
+                                className="h-20 md:h-24 lg:h-32 w-auto object-contain"
                             />
                         </div>
 

@@ -12,7 +12,7 @@ export default function CompanyPage() {
                 <header className="container mx-auto px-6 py-20 md:py-32 text-center">
                     <div className="flex justify-center mb-8">
                         <img
-                            src="/company-logo.png"
+                            src="/logo-horizontal.png"
                             alt="LightYear Algorithm Logo"
                             className="h-20 md:h-24 w-auto object-contain"
                         />
